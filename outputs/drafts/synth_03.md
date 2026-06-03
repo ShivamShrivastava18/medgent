@@ -1,83 +1,83 @@
 # Discharge Summary Draft
 
-_Generated 2026-06-03T05:44:22.006110+00:00_  ·  source: `data/synthetic/synth_03/source.pdf`
+_Generated 2026-06-03T11:02:48.790215+00:00_  ·  source: `data/synthetic/synth_03/source.pdf`
 
-**Agent metrics:** 25 iterations, 17 tool calls
+**Agent metrics:** 47 iterations, 31 tool calls
 
-**Safety flags:** 7
+**Safety flags:** 1
 
-## Patient demographics
-- **name:** Pendergrass, Penelope
-- **mrn:** 000-11-222
-
-_Sources: p.1_
+## Patient demographics  —  **FLAGGED**
+> Unable to locate patient's age, sex, or MRN after multiple search attempts. Only the patient's name 'synth_03' was found.
 
 ## Admission date
-2023-10-21
+2026-04-21
 
 _Sources: p.1_
 
 ## Discharge date
-2023-10-22
+2026-04-23
 
-_Sources: p.2_
+_Sources: p.3_
 
 ## Principal diagnosis
-Community-acquired pneumonia
+Enteric fever (Typhoid)
 
-_Sources: p.1_
+_Sources: p.1, p.6_
 
-## Secondary diagnoses
-- {'diagnosis': 'Hypertension'}
-- {'diagnosis': 'Type 2 Diabetes Mellitus'}
-
-_Sources: p.1_
+## Secondary diagnoses  —  **MISSING**
+> agent did not commit a value
 
 ## Hospital course
-Hospital course summary: Penelope Chen was admitted for community-acquired pneumonia with symptoms of cough, fever, and shortness of breath. She was treated with intravenous Ceftriaxone and supplemental oxygen. The patient responded well to treatment; her fever resolved and oxygen saturation improved. After completing a course of intravenous antibiotics, she showed significant clinical improvement and was stable for discharge.
+Hospital course summary: The patient was admitted for enteric fever (typhoid) with fever spikes. Blood cultures from admission were positive for Salmonella Typhi, which was sensitive to ceftriaxone. The patient was started on IV Ceftriaxone. The patient became afebrile on hospital day 2.
 
-_Sources: p.1, p.3, p.6_
+_Sources: p.1, p.3, p.4_
 
-## Procedures
-- No procedures performed.
-
-_Sources: p.1, p.3_
+## Procedures  —  **MISSING**
+> agent did not commit a value
 
 ## Admission medications
-- name_as_written=Lisinopril, dose=10 mg, route=PO, frequency=daily
-- name_as_written=Metformin, dose=500 mg, route=PO, frequency=twice daily
+- name_as_written=MONOCEF, dose=1g, route=IV, frequency=1-0-1
+
+_Sources: p.5_
+
+## Discharge medications
+- name_as_written=AZITHRAL, dose=500mg, frequency=1-0-0, duration=5 days
+- name_as_written=PAN, dose=40mg, frequency=1-0-0
+- name_as_written=DOLO, dose=650mg, frequency=SOS
+- name_as_written=EMSET, dose=4mg, frequency=SOS
+
+_Sources: p.5_
+
+## Medication changes
+
+_Sources: p.5_
+
+## Drug interactions
+
+_Sources: p.6_
+
+## Allergies
+- No Known Drug Allergies
 
 _Sources: p.1_
 
-## Discharge medications  —  **FLAGGED**
-> loop ended without commit — clinician must decide
+## Follow-up instructions
+['Review with CBC in 5 days']
 
-## Medication changes  —  **FLAGGED**
-> loop ended without commit — clinician must decide
+_Sources: p.6_
 
-## Drug interactions  —  **FLAGGED**
-> loop ended without commit — clinician must decide
+## Pending results
+- {'name': 'Complete Blood Count', 'status': 'pending'}
 
-## Allergies  —  **FLAGGED**
-> loop ended without commit — clinician must decide
+_Sources: p.1_
 
-## Follow-up instructions  —  **FLAGGED**
-> loop ended without commit — clinician must decide
+## Discharge condition
+Stable. Afebrile for the last 24 hours.
 
-## Pending results  —  **FLAGGED**
-> loop ended without commit — clinician must decide
-
-## Discharge condition  —  **FLAGGED**
-> loop ended without commit — clinician must decide
+_Sources: p.6_
 
 ## Safety flags raised
-- **[medium]** `discharge_medications` — loop ended without commit — clinician must decide
-- **[medium]** `medication_changes` — loop ended without commit — clinician must decide
-- **[medium]** `allergies` — loop ended without commit — clinician must decide
-- **[medium]** `follow_up` — loop ended without commit — clinician must decide
-- **[medium]** `pending_results` — loop ended without commit — clinician must decide
-- **[medium]** `discharge_condition` — loop ended without commit — clinician must decide
-- **[medium]** `drug_interactions` — loop ended without commit — clinician must decide
+- **[medium]** `demographics` — Unable to locate patient's age, sex, or MRN after multiple search attempts. Only the patient's name 'synth_03' was found.
 
 
 ---

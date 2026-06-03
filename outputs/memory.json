@@ -1,20 +1,44 @@
 {
   "rules": [
     {
-      "section": "secondary_diagnoses",
-      "pattern_kind": "reorder_severity",
-      "hint": "Order secondary diagnoses by clinical severity (most severe first); tie-break alphabetically.",
-      "frequency": 3,
-      "example_before": "{'diagnosis': 'Hypertension', 'type': 'chronic'} | {'diagnosis': 'Type 2 Diabetes Mellitus', 'type': 'chronic'} | {'diagnosis': 'Hyperlipidemia', 'type': 'chronic'} | {'diagnosis': 'Coronary Artery Di",
-      "example_after": "{'diagnosis': 'Hypertension', 'type': 'chronic'} | {'diagnosis': 'Type 2 Diabetes Mellitus', 'type': 'chronic'} | {'diagnosis': 'Chronic Obstructive Pulmonary Disease (COPD), Gold stage 3', 'type': 'c"
-    },
-    {
       "section": "hospital_course",
       "pattern_kind": "text_change",
       "hint": "Open the hospital_course narrative with the exact header 'Hospital course summary:' followed by one space. Break sentences with newlines.",
       "frequency": 9,
-      "example_before": "Hospital course summary: Penelope Chen was admitted for community-acquired pneumonia, presenting with cough, fever, and shortness of breath. She was treated with intravenous Ceftriaxone and supplement",
-      "example_after": "Hospital course summary: Penelope Chen was admitted for community-acquired pneumonia, presenting with cough, fever, and shortness of breath.\nShe was treated with intravenous Ceftriaxone and supplement"
+      "example_before": "Hospital course summary: The patient was admitted for enteric fever (typhoid) with fever spikes. Blood cultures from admission were positive for Salmonella Typhi, which was sensitive to ceftriaxone. T",
+      "example_after": "Hospital course summary: The patient was admitted for enteric fever (typhoid) with fever spikes.\nBlood cultures from admission were positive for Salmonella Typhi, which was sensitive to ceftriaxone.\nT"
+    },
+    {
+      "section": "discharge_medications",
+      "pattern_kind": "text_change",
+      "hint": "For section 'discharge_medications', match the reviewer's phrasing exactly when evidence permits.",
+      "frequency": 3,
+      "example_before": "DOLO-650 650mg SOS | PANTOPRAZOLE 40mg OD | ONDANSETRON 4mg SOS | VITAMIN C 500mg OD | CARIPAPIL 1 tab TID | LIV-52 2 tsp BID",
+      "example_after": "paracetamol (Dolo-650) 650mg SOS | PANTOPRAZOLE 40mg OD | ONDANSETRON 4mg SOS | VITAMIN C 500mg OD | CARIPAPIL 1 tab TID | LIV-52 2 tsp BID"
+    },
+    {
+      "section": "discharge_medications",
+      "pattern_kind": "brand_rename",
+      "hint": "When writing medication entries, render brand-only names as '<generic> (<Brand>)' — e.g. 'TAB RACIPER' → 'rabeprazole (Raciper)'.",
+      "frequency": 6,
+      "example_before": "AZITHRAL 500mg 1-0-0 | PAN 40mg 1-0-0 | DOLO 650mg SOS | EMSET 4mg SOS",
+      "example_after": "azithromycin (Azithral) 500mg 1-0-0 | pantoprazole (Pan) 40mg 1-0-0 | paracetamol (Dolo) 650mg SOS | EMSET 4mg SOS"
+    },
+    {
+      "section": "pending_results",
+      "pattern_kind": "pending_date_suffix",
+      "hint": "Render pending results with explicit date suffix: '<test> (pending as of <discharge_date>)'.",
+      "frequency": 6,
+      "example_before": "{'name': 'Complete Blood Count', 'status': 'pending'}",
+      "example_after": "{'name': 'Complete Blood Count', 'status': 'pending'} (pending as of 2026-04-23)"
+    },
+    {
+      "section": "admission_medications",
+      "pattern_kind": "brand_rename",
+      "hint": "When writing medication entries, render brand-only names as '<generic> (<Brand>)' — e.g. 'TAB RACIPER' → 'rabeprazole (Raciper)'.",
+      "frequency": 3,
+      "example_before": "MONOCEF 1g 1-0-1",
+      "example_after": "ceftriaxone (Monocef) 1g 1-0-1"
     }
   ]
 }

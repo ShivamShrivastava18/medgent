@@ -1,16 +1,16 @@
 [
   {
     "iteration": 0,
-    "holdout_edit_distance_norm": 0.008301587301587301,
+    "holdout_edit_distance_norm": 0.04446220596734701,
     "holdout_safety_preservation": 1.0,
-    "holdout_field_retention": 0.9,
+    "holdout_field_retention": 0.75,
     "per_section": {
       "sec.principal_diagnosis": 0.0,
       "sec.secondary_diagnoses": 0.0,
-      "sec.hospital_course": 0.08301587301587302,
+      "sec.hospital_course": 0.16008943369085962,
       "sec.procedures": 0.0,
-      "sec.admission_medications": 0.0,
-      "sec.discharge_medications": 0.0,
+      "sec.admission_medications": 0.13073394495412843,
+      "sec.discharge_medications": 0.15379868102848204,
       "sec.allergies": 0.0,
       "sec.follow_up": 0.0,
       "sec.pending_results": 0.0,
@@ -20,59 +20,59 @@
   },
   {
     "iteration": 1,
-    "holdout_edit_distance_norm": 0.0008410138248847927,
+    "holdout_edit_distance_norm": 0.02923710504054908,
     "holdout_safety_preservation": 1.0,
-    "holdout_field_retention": 0.9,
+    "holdout_field_retention": 0.75,
     "per_section": {
       "sec.principal_diagnosis": 0.0,
       "sec.secondary_diagnoses": 0.0,
-      "sec.hospital_course": 0.008410138248847926,
+      "sec.hospital_course": 0.007838424422880307,
       "sec.procedures": 0.0,
-      "sec.admission_medications": 0.0,
-      "sec.discharge_medications": 0.0,
+      "sec.admission_medications": 0.13073394495412843,
+      "sec.discharge_medications": 0.15379868102848204,
       "sec.allergies": 0.0,
       "sec.follow_up": 0.0,
       "sec.pending_results": 0.0,
       "sec.discharge_condition": 0.0
     },
-    "rules_total": 2
+    "rules_total": 5
   },
   {
     "iteration": 2,
-    "holdout_edit_distance_norm": 0.000812890812890813,
+    "holdout_edit_distance_norm": 0.02923710504054908,
     "holdout_safety_preservation": 1.0,
-    "holdout_field_retention": 0.9,
+    "holdout_field_retention": 0.75,
     "per_section": {
       "sec.principal_diagnosis": 0.0,
       "sec.secondary_diagnoses": 0.0,
-      "sec.hospital_course": 0.00812890812890813,
+      "sec.hospital_course": 0.007838424422880307,
       "sec.procedures": 0.0,
-      "sec.admission_medications": 0.0,
-      "sec.discharge_medications": 0.0,
+      "sec.admission_medications": 0.13073394495412843,
+      "sec.discharge_medications": 0.15379868102848204,
       "sec.allergies": 0.0,
       "sec.follow_up": 0.0,
       "sec.pending_results": 0.0,
       "sec.discharge_condition": 0.0
     },
-    "rules_total": 2
+    "rules_total": 5
   },
   {
     "iteration": 3,
-    "holdout_edit_distance_norm": 0.001180721225322408,
+    "holdout_edit_distance_norm": 0.029230822686425344,
     "holdout_safety_preservation": 1.0,
-    "holdout_field_retention": 0.9,
+    "holdout_field_retention": 0.75,
     "per_section": {
       "sec.principal_diagnosis": 0.0,
       "sec.secondary_diagnoses": 0.0,
-      "sec.hospital_course": 0.011807212253224078,
+      "sec.hospital_course": 0.007775600881642935,
       "sec.procedures": 0.0,
-      "sec.admission_medications": 0.0,
-      "sec.discharge_medications": 0.0,
+      "sec.admission_medications": 0.13073394495412843,
+      "sec.discharge_medications": 0.15379868102848204,
       "sec.allergies": 0.0,
       "sec.follow_up": 0.0,
       "sec.pending_results": 0.0,
       "sec.discharge_condition": 0.0
     },
-    "rules_total": 2
+    "rules_total": 5
   }
 ]

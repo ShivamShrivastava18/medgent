@@ -1,32 +1,34 @@
 {
   "patient": {
-    "value": {
-      "name": "Pendergrass, Penelope",
-      "age": null,
-      "sex": null,
-      "mrn": "000-11-222"
-    },
-    "status": "filled",
+    "value": null,
+    "status": "flagged",
     "citations": [
       {
         "page_no": 1,
         "doc_type": "admission_note",
-        "excerpt": "PATIENT: Pendergrass, Penelope DOB: 1963-09-15 MRN: 000-11-222",
+        "excerpt": "ADMISSION NOTE - Patient synth_03 - Enteric fever (Typhoid) with fever spikes",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 2,
+        "doc_type": "progress_note",
+        "excerpt": "PROGRESS NOTE ? Day 1 - Patient synth_03 - Enteric fever (Typhoid) with fever",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
     ],
-    "flag_reason": null,
+    "flag_reason": "Unable to locate patient's age, sex, or MRN after multiple search attempts. Only the patient's name 'synth_03' was found.",
     "conflicts": null
   },
   "admission_date": {
-    "value": "2023-10-21",
+    "value": "2026-04-21",
     "status": "filled",
     "citations": [
       {
         "page_no": 1,
         "doc_type": "admission_note",
-        "excerpt": "admission-context date 2023-10-21 on admission_note",
+        "excerpt": "admission-context date 2026-04-21 on admission_note",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -35,13 +37,13 @@
     "conflicts": null
   },
   "discharge_date": {
-    "value": "2023-10-22",
+    "value": "2026-04-23",
     "status": "filled",
     "citations": [
       {
-        "page_no": 2,
+        "page_no": 3,
         "doc_type": "progress_note",
-        "excerpt": "discharge-context date 2023-10-22 on progress_note",
+        "excerpt": "discharge-context date 2026-04-23 on progress_note",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -50,13 +52,20 @@
     "conflicts": null
   },
   "principal_diagnosis": {
-    "value": "Community-acquired pneumonia",
+    "value": "Enteric fever (Typhoid)",
     "status": "filled",
     "citations": [
       {
         "page_no": 1,
         "doc_type": "admission_note",
-        "excerpt": "ADMISSION NOTE - Patient synth_03 - Community-acquired pneumonia",
+        "excerpt": "ADMISSION NOTE - Patient synth_03 - Enteric fever (Typhoid) with fever",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "DISCHARGE ADVICE - Patient synth_03 - Enteric fever (Typhoid) with fever spi",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -65,45 +74,34 @@
     "conflicts": null
   },
   "secondary_diagnoses": {
-    "value": [
-      "{'diagnosis': 'Hypertension'}",
-      "{'diagnosis': 'Type 2 Diabetes Mellitus'}"
-    ],
-    "status": "filled",
-    "citations": [
-      {
-        "page_no": 1,
-        "doc_type": "admission_note",
-        "excerpt": "PAST MEDICAL HISTORY:\n- Hypertension\n- Type 2 Diabetes Mellitus",
-        "is_handwritten": false,
-        "transcription_confidence": 1.0
-      }
-    ],
-    "flag_reason": null,
+    "value": null,
+    "status": "missing",
+    "citations": [],
+    "flag_reason": "agent did not commit a value",
     "conflicts": null
   },
   "hospital_course": {
-    "value": "Hospital course summary: Penelope Chen was admitted for community-acquired pneumonia with symptoms of cough, fever, and shortness of breath. She was treated with intravenous Ceftriaxone and supplemental oxygen. The patient responded well to treatment; her fever resolved and oxygen saturation improved. After completing a course of intravenous antibiotics, she showed significant clinical improvement and was stable for discharge.",
+    "value": "Hospital course summary: The patient was admitted for enteric fever (typhoid) with fever spikes. Blood cultures from admission were positive for Salmonella Typhi, which was sensitive to ceftriaxone. The patient was started on IV Ceftriaxone. The patient became afebrile on hospital day 2.",
     "status": "filled",
     "citations": [
       {
         "page_no": 1,
         "doc_type": "admission_note",
-        "excerpt": "ADMISSION NOTE...PATIENT: Penelope Chen...CHIEF COMPLAINT: Cough, fever, shortness of breath...ASSESSMENT: Community-acquired pneumonia.",
+        "excerpt": "ADMISSION NOTE - Patient synth_03 - Enteric fever (Typhoid) with fever spikes",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       },
       {
         "page_no": 3,
         "doc_type": "progress_note",
-        "excerpt": "PROGRESS NOTE...Patient is responding well to intravenous antibiotics (Ceftriaxone) and supplemental oxygen. Fever has resolved. Oxygen saturation has improved.",
+        "excerpt": "PROGRESS NOTE ? Day 2 - Patient synth_03 - Enteric fever (Typhoid) with fever spikes. Patient is afebrile today. Blood culture from admission is positive for Salmonella Typhi. Started on IV Ceftriaxone.",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       },
       {
-        "page_no": 6,
-        "doc_type": "discharge_summary",
-        "excerpt": "DISCHARGE ADVICE...Patient has completed a course of intravenous antibiotics and has shown significant clinical improvement. Stable for discharge.",
+        "page_no": 4,
+        "doc_type": "lab_report",
+        "excerpt": "Blood Culture: Salmonella Typhi, Sensitive to Ceftriaxone",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -112,54 +110,29 @@
     "conflicts": null
   },
   "procedures": {
-    "value": [
-      "No procedures performed."
-    ],
-    "status": "filled",
-    "citations": [
-      {
-        "page_no": 1,
-        "doc_type": "admission_note",
-        "excerpt": "ADMISSION NOTE... Plan: Admit to medical floor. Start IV Ceftriaxone. Supportive care with IV fluids and oxygen as needed.",
-        "is_handwritten": false,
-        "transcription_confidence": 1.0
-      },
-      {
-        "page_no": 3,
-        "doc_type": "progress_note",
-        "excerpt": "PROGRESS NOTE ... The patient is responding well to intravenous Ceftriaxone... Plan: Continue current management.",
-        "is_handwritten": false,
-        "transcription_confidence": 1.0
-      }
-    ],
-    "flag_reason": null,
+    "value": null,
+    "status": "missing",
+    "citations": [],
+    "flag_reason": "agent did not commit a value",
     "conflicts": null
   },
   "admission_medications": {
     "value": [
       {
-        "name_as_written": "Lisinopril",
+        "name_as_written": "MONOCEF",
         "normalized_name": null,
-        "dose": "10 mg",
-        "route": "PO",
-        "frequency": "daily",
-        "duration": null
-      },
-      {
-        "name_as_written": "Metformin",
-        "normalized_name": null,
-        "dose": "500 mg",
-        "route": "PO",
-        "frequency": "twice daily",
+        "dose": "1g",
+        "route": "IV",
+        "frequency": "1-0-1",
         "duration": null
       }
     ],
     "status": "filled",
     "citations": [
       {
-        "page_no": 1,
-        "doc_type": "admission_note",
-        "excerpt": "MEDICATIONS ON ADMISSION:\n- Lisinopril 10 mg daily\n- Metformin 500 mg twice daily",
+        "page_no": 5,
+        "doc_type": "med_admin",
+        "excerpt": "Medication Administration Record... MONOCEF, Dose: 1g, Route: IV, Frequency: 1-0-1",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -168,107 +141,173 @@
     "conflicts": null
   },
   "discharge_medications": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": [
+      {
+        "name_as_written": "AZITHRAL",
+        "normalized_name": null,
+        "dose": "500mg",
+        "route": null,
+        "frequency": "1-0-0",
+        "duration": "5 days"
+      },
+      {
+        "name_as_written": "PAN",
+        "normalized_name": null,
+        "dose": "40mg",
+        "route": null,
+        "frequency": "1-0-0",
+        "duration": null
+      },
+      {
+        "name_as_written": "DOLO",
+        "normalized_name": null,
+        "dose": "650mg",
+        "route": null,
+        "frequency": "SOS",
+        "duration": null
+      },
+      {
+        "name_as_written": "EMSET",
+        "normalized_name": null,
+        "dose": "4mg",
+        "route": null,
+        "frequency": "SOS",
+        "duration": null
+      }
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 5,
+        "doc_type": "med_admin",
+        "excerpt": "DISCHARGE MEDICATIONS:\n1. AZITHRAL 500mg 1-0-0 5 days\n2. PAN 40mg 1-0-0\n3. DOLO 650mg SOS\n4. EMSET 4mg SOS",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "medication_changes": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": [],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 5,
+        "doc_type": "med_admin",
+        "excerpt": "Full medication administration record on page 5 details both admission and discharge medications.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "allergies": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": [
+      "No Known Drug Allergies"
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Allergies: No Known Drug Allergies",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "follow_up": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": "['Review with CBC in 5 days']",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "Review with CBC after 5 days.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "pending_results": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": [
+      "{'name': 'Complete Blood Count', 'status': 'pending'}"
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Complete Blood Count - pending",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "discharge_condition": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": "Stable. Afebrile for the last 24 hours.",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "Condition on discharge: Stable. Afebrile for the last 24 hours.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "drug_interactions": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": [],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "DISCHARGE MEDICATIONS - \n1. Tab Cefixime 200mg BD for 7 days\n2. Tab Paracetamol 500mg SOS for fever\n3. Tab Ondansetron 4mg SOS for vomiting\n4. Syr Zinc 20mg OD for 14 days",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "safety_flags": [
     {
-      "field": "discharge_medications",
-      "reason": "loop ended without commit — clinician must decide",
+      "field": "demographics",
+      "reason": "Unable to locate patient's age, sex, or MRN after multiple search attempts. Only the patient's name 'synth_03' was found.",
       "severity": "medium",
-      "raised_at_step": 25,
-      "citations": []
-    },
-    {
-      "field": "medication_changes",
-      "reason": "loop ended without commit — clinician must decide",
-      "severity": "medium",
-      "raised_at_step": 25,
-      "citations": []
-    },
-    {
-      "field": "allergies",
-      "reason": "loop ended without commit — clinician must decide",
-      "severity": "medium",
-      "raised_at_step": 25,
-      "citations": []
-    },
-    {
-      "field": "follow_up",
-      "reason": "loop ended without commit — clinician must decide",
-      "severity": "medium",
-      "raised_at_step": 25,
-      "citations": []
-    },
-    {
-      "field": "pending_results",
-      "reason": "loop ended without commit — clinician must decide",
-      "severity": "medium",
-      "raised_at_step": 25,
-      "citations": []
-    },
-    {
-      "field": "discharge_condition",
-      "reason": "loop ended without commit — clinician must decide",
-      "severity": "medium",
-      "raised_at_step": 25,
-      "citations": []
-    },
-    {
-      "field": "drug_interactions",
-      "reason": "loop ended without commit — clinician must decide",
-      "severity": "medium",
-      "raised_at_step": 25,
-      "citations": []
+      "raised_at_step": 18,
+      "citations": [
+        {
+          "page_no": 1,
+          "doc_type": "admission_note",
+          "excerpt": "ADMISSION NOTE - Patient synth_03 - Enteric fever (Typhoid) with fever spikes",
+          "is_handwritten": false,
+          "transcription_confidence": 1.0
+        },
+        {
+          "page_no": 2,
+          "doc_type": "progress_note",
+          "excerpt": "PROGRESS NOTE ? Day 1 - Patient synth_03 - Enteric fever (Typhoid) with fever",
+          "is_handwritten": false,
+          "transcription_confidence": 1.0
+        }
+      ]
     }
   ],
-  "generated_at": "2026-06-03T05:44:22.006110Z",
+  "generated_at": "2026-06-03T11:02:48.790215Z",
   "source_pdf": "data/synthetic/synth_03/source.pdf",
-  "iterations_used": 25,
-  "tool_calls_used": 17
+  "iterations_used": 47,
+  "tool_calls_used": 31
 }

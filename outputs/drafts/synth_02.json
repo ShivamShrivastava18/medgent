@@ -1,17 +1,24 @@
 {
   "patient": {
     "value": {
-      "name": null,
-      "age": null,
-      "sex": null,
-      "mrn": null
+      "name": "synth_02",
+      "age": "52",
+      "sex": "M",
+      "mrn": "synth_02"
     },
     "status": "filled",
     "citations": [
       {
-        "page_no": 3,
-        "doc_type": "progress_note",
-        "excerpt": "PROGRESS NOTE ? Day 2 - Patient synth_02 - Acute heart failure exacerbation",
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "ADMISSION NOTE Patient: synth_02 MRN: synth_02 DOB: 1972-03-16 Age: 52 Sex: M",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 4,
+        "doc_type": "lab_report",
+        "excerpt": "DISCHARGE SUMMARY Patient: synth_02 MRN: synth_02 DOB: 1972-03-16 Age: 52 Sex: M",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -20,13 +27,13 @@
     "conflicts": null
   },
   "admission_date": {
-    "value": "2023-08-12",
+    "value": "2026-04-15",
     "status": "filled",
     "citations": [
       {
         "page_no": 1,
         "doc_type": "admission_note",
-        "excerpt": "Admission Date: 2023-08-12",
+        "excerpt": "admission-context date 2026-04-15 on admission_note",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -35,13 +42,13 @@
     "conflicts": null
   },
   "discharge_date": {
-    "value": "2023-08-13",
+    "value": "2026-04-17",
     "status": "filled",
     "citations": [
       {
-        "page_no": 6,
-        "doc_type": "discharge_summary",
-        "excerpt": "DISCHARGE ADVICE - Patient synth_02 - Acute heart failure exacerbation\nPATIENT: synth_02\nADMISSION DATE: 2023-08-12\nDISCHARGE DATE: 2023-08-13",
+        "page_no": 3,
+        "doc_type": "progress_note",
+        "excerpt": "discharge-context date 2026-04-17 on progress_note",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -50,13 +57,20 @@
     "conflicts": null
   },
   "principal_diagnosis": {
-    "value": "Acute heart failure exacerbation",
+    "value": "Acute viral hepatitis A",
     "status": "filled",
     "citations": [
       {
-        "page_no": 2,
-        "doc_type": "progress_note",
-        "excerpt": "PROGRESS NOTE ? Day 1 - Patient synth_02 - Acute heart failure exacerbation\nPAT",
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Assessment and Plan:\n1.  **Acute viral hepatitis, likely Hepatitis A** given recent travel and exposure history. Will send serologies to confirm. Plan for supportive care.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 5,
+        "doc_type": "med_admin",
+        "excerpt": "HOSPITAL COURSE Patient synth_02 was admitted on 2026-04-15 with acute viral\nhepatitis, suspected to be Hepatitis A. ... Hepatitis A IgM was\nconfirmed positive.",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -66,19 +80,33 @@
   },
   "secondary_diagnoses": {
     "value": null,
-    "status": "missing",
+    "status": "flagged",
     "citations": [],
-    "flag_reason": "Searches for 'secondary diagnosis' and 'comorbidities' returned no results.",
+    "flag_reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 6 content); downgraded to FLAGGED by guardrail",
     "conflicts": null
   },
   "hospital_course": {
-    "value": "Hospital course summary: The patient was admitted for an acute heart failure exacerbation. The patient reported feeling much better and less short of breath. On examination, there were crackles at the lung bases and 1+ pedal edema, both of which had improved since admission.",
+    "value": "He was managed supportively with intravenous fluids and antiemetics. His symptoms of nausea and fatigue improved, and his liver function tests showed a downward trend.",
     "status": "filled",
     "citations": [
       {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "Hospital Course: The patient was admitted for management of acute viral hepatitis, likely Hepatitis E. He was managed supportively with intravenous fluids and antiemetics. His symptoms of nausea and fatigue improved, and his liver function tests showed a downward trend. He remained afebrile and hemo",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Patient is a 45-year-old male presenting with a 1-week history of jaundice, fatigue, and nausea. Initial labs showed markedly elevated liver enzymes... Admitted for supportive care and further investigation.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
         "page_no": 2,
         "doc_type": "progress_note",
-        "excerpt": "PROGRESS NOTE ? Day 1 - Patient synth_02 - Acute heart failure exacerbation... Patient reports feeling much better today. Less short of breath... Lungs: Crackles at bases bilaterally, improved from admission... Extremities: 1+ pedal edema, improved from 2+ on admission... ASSESSMENT/PLAN: Acute hear",
+        "excerpt": "Patient remains clinically stable. Nausea has improved with antiemetics. Liver enzymes are trending down, but still significantly elevated. Continues on IV fluids for hydration. Awaiting Hepatitis E serology results.",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -90,157 +118,49 @@
     "value": null,
     "status": "missing",
     "citations": [],
-    "flag_reason": "Search for 'procedure' returned no results.",
+    "flag_reason": "agent did not commit a value",
     "conflicts": null
   },
   "admission_medications": {
-    "value": [
-      {
-        "name_as_written": "Lisinopril",
-        "normalized_name": null,
-        "dose": "20 mg",
-        "route": "by mouth",
-        "frequency": "daily",
-        "duration": null
-      },
-      {
-        "name_as_written": "Metoprolol Succinate",
-        "normalized_name": null,
-        "dose": "100 mg",
-        "route": "by mouth",
-        "frequency": "daily",
-        "duration": null
-      },
-      {
-        "name_as_written": "Furosemide",
-        "normalized_name": null,
-        "dose": "40 mg",
-        "route": "by mouth",
-        "frequency": "twice a day",
-        "duration": null
-      },
-      {
-        "name_as_written": "Spironolactone",
-        "normalized_name": null,
-        "dose": "25 mg",
-        "route": "by mouth",
-        "frequency": "daily",
-        "duration": null
-      },
-      {
-        "name_as_written": "Atorvastatin",
-        "normalized_name": null,
-        "dose": "40 mg",
-        "route": "by mouth",
-        "frequency": "daily",
-        "duration": null
-      },
-      {
-        "name_as_written": "Aspirin",
-        "normalized_name": null,
-        "dose": "81 mg",
-        "route": "by mouth",
-        "frequency": "daily",
-        "duration": null
-      }
-    ],
-    "status": "filled",
-    "citations": [
-      {
-        "page_no": 5,
-        "doc_type": "discharge_summary",
-        "excerpt": "Lisinopril 20 mg by mouth daily",
-        "is_handwritten": false,
-        "transcription_confidence": 1.0
-      },
-      {
-        "page_no": 5,
-        "doc_type": "discharge_summary",
-        "excerpt": "Metoprolol Succinate 100 mg by mouth daily",
-        "is_handwritten": false,
-        "transcription_confidence": 1.0
-      },
-      {
-        "page_no": 5,
-        "doc_type": "discharge_summary",
-        "excerpt": "Furosemide 40 mg by mouth twice a day",
-        "is_handwritten": false,
-        "transcription_confidence": 1.0
-      },
-      {
-        "page_no": 5,
-        "doc_type": "discharge_summary",
-        "excerpt": "Spironolactone 25 mg by mouth daily",
-        "is_handwritten": false,
-        "transcription_confidence": 1.0
-      },
-      {
-        "page_no": 5,
-        "doc_type": "discharge_summary",
-        "excerpt": "Atorvastatin 40 mg by mouth daily",
-        "is_handwritten": false,
-        "transcription_confidence": 1.0
-      },
-      {
-        "page_no": 5,
-        "doc_type": "discharge_summary",
-        "excerpt": "Aspirin 81 mg by mouth daily",
-        "is_handwritten": false,
-        "transcription_confidence": 1.0
-      }
-    ],
-    "flag_reason": null,
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail",
     "conflicts": null
   },
   "discharge_medications": {
     "value": [
       {
-        "name_as_written": "Furosemide",
+        "name_as_written": "Ursodeoxycholic acid",
         "normalized_name": null,
-        "dose": "40 mg",
-        "route": "by mouth",
-        "frequency": "daily",
+        "dose": "300mg",
+        "route": "PO",
+        "frequency": "1-0-1",
         "duration": null
       },
       {
-        "name_as_written": "Lisinopril",
+        "name_as_written": "Pan",
         "normalized_name": null,
-        "dose": "20 mg",
-        "route": "by mouth",
-        "frequency": "daily",
+        "dose": "40mg",
+        "route": "PO",
+        "frequency": "1-0-0",
         "duration": null
       },
       {
-        "name_as_written": "Metoprolol Succinate",
+        "name_as_written": "Atarax",
         "normalized_name": null,
-        "dose": "100 mg",
-        "route": "by mouth",
-        "frequency": "daily",
-        "duration": null
-      },
-      {
-        "name_as_written": "Spironolactone",
-        "normalized_name": null,
-        "dose": "25 mg",
-        "route": "by mouth",
-        "frequency": "daily",
-        "duration": null
-      },
-      {
-        "name_as_written": "Potassium Chloride",
-        "normalized_name": null,
-        "dose": "20 mEq",
-        "route": "by mouth",
-        "frequency": "daily",
+        "dose": "25mg",
+        "route": "PO",
+        "frequency": "0-0-1",
         "duration": null
       }
     ],
     "status": "filled",
     "citations": [
       {
-        "page_no": 5,
+        "page_no": 6,
         "doc_type": "discharge_summary",
-        "excerpt": "Discharge Medications:\nLisinopril 20 mg by mouth daily\nMetoprolol Succinate 100 mg by mouth daily\nFurosemide 40 mg by mouth daily\nSpironolactone 25 mg by mouth daily\nPotassium Chloride 20 mEq by mouth daily",
+        "excerpt": "Discharge Medications:\n1. Tab. Ursodeoxycholic acid 300mg 1-0-1\n2. Tab. Pan 40mg 1-0-0\n3. Tab. Atarax 25mg 0-0-1",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -249,93 +169,219 @@
     "conflicts": null
   },
   "medication_changes": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": [
+      {
+        "medication_name": "IV FLUID (DNS 500ml)",
+        "normalized_name": null,
+        "change_type": "stopped",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": "Patient was started on IV fluids on admission for dehydration, which was stopped once the patient was able to tolerate oral intake.",
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "INJ MONOCEF 1GM",
+        "normalized_name": null,
+        "change_type": "stopped",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": "Patient was started on IV antibiotics on admission for suspected infection, which was stopped after the infection was ruled out.",
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "INJ EMSET 4MG",
+        "normalized_name": null,
+        "change_type": "stopped",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": "Patient was given IV antiemetics on admission for nausea and vomiting, which was stopped once the symptoms resolved.",
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "TAB DOLO 650MG",
+        "normalized_name": null,
+        "change_type": "stopped",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": "Patient was given paracetamol for fever and pain, which was stopped as symptoms resolved.",
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "Ursodeoxycholic acid",
+        "normalized_name": null,
+        "change_type": "added",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": "Started for cholestatic pattern of liver injury.",
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "Pan",
+        "normalized_name": null,
+        "change_type": "added",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": "Started for gastritis.",
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "Creon",
+        "normalized_name": null,
+        "change_type": "added",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": "Started for suspected pancreatic insufficiency.",
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "Becadexamin",
+        "normalized_name": null,
+        "change_type": "added",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": "Started as a multivitamin supplement.",
+        "needs_reconciliation": false,
+        "citations": []
+      }
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "PLAN: - IV FLUIDS (DNS 500ml BD) - INJ MONOCEF 1GM IV BD - INJ EMSET 4MG IV SOS - TAB DOLO 650MG SOS",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "DISCHARGE MEDICATIONS: 1. TAB URSODEOXYCHOLIC ACID 300MG 1-0-1 2. TAB PAN 40MG 1-0-0 3. CAP CREON 10000U 1-0-1 4. CAP BECADEXAMIN 0-1-0",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "allergies": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": [
+      "No Known Allergies"
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Allergies: No Known Allergies",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "follow_up": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": "['Follow up with your primary care physician in 1 week', 'Follow up with Gastroenterology in 1 month with repeat LFTs']",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "Follow up with your primary care physician in 1 week. ... Review in Gastroenterology OPD after 1 month with repeat LFTs.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "pending_results": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": [
+      "{'test_name': 'Complete Blood Count', 'status': 'pending'}"
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Complete Blood Count",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "discharge_condition": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": "Stable",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "Condition on discharge - Stable",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "drug_interactions": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": [],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "DISCHARGE MEDICATIONS - \n1. Tab UDILIV 300mg 1-0-1 after food\n2. Tab PAN 40mg 1-0-0 before food\n3. Tab Becosules Z 1-0-0 after food\n4. Syr Looz 10ml 0-0-1 after food",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "safety_flags": [
     {
-      "field": "medication_changes",
-      "reason": "loop ended without commit — clinician must decide",
+      "field": "secondary_diagnoses",
+      "reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 6 content); downgraded to FLAGGED by guardrail",
       "severity": "medium",
-      "raised_at_step": 25,
+      "raised_at_step": 23,
       "citations": []
     },
     {
-      "field": "allergies",
-      "reason": "loop ended without commit — clinician must decide",
+      "field": "admission_medications",
+      "reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail",
       "severity": "medium",
-      "raised_at_step": 25,
+      "raised_at_step": 31,
       "citations": []
     },
     {
-      "field": "follow_up",
-      "reason": "loop ended without commit — clinician must decide",
+      "field": "hospital_course",
+      "reason": "verifier stripped unsupported sentence: Hospital course summary: The patient was admitted for management of acute viral hepatitis, likely Hepatitis E, presenting with a one-week history of jaundice, f — verifier call failed; conservative default",
       "severity": "medium",
-      "raised_at_step": 25,
+      "raised_at_step": null,
       "citations": []
     },
     {
-      "field": "pending_results",
-      "reason": "loop ended without commit — clinician must decide",
+      "field": "hospital_course",
+      "reason": "verifier stripped unsupported sentence: He remained afebrile and hemodynamically stable throughout his admission. — Excerpt [0] states \"He remained afebrile and hemo\", which is truncated and does not fully confirm \"hemodynamically stable\". No other excerpt explicitly states the patient remained hemodynamically stable throughout the admission.",
       "severity": "medium",
-      "raised_at_step": 25,
-      "citations": []
-    },
-    {
-      "field": "discharge_condition",
-      "reason": "loop ended without commit — clinician must decide",
-      "severity": "medium",
-      "raised_at_step": 25,
-      "citations": []
-    },
-    {
-      "field": "drug_interactions",
-      "reason": "loop ended without commit — clinician must decide",
-      "severity": "medium",
-      "raised_at_step": 25,
+      "raised_at_step": null,
       "citations": []
     }
   ],
-  "generated_at": "2026-06-03T05:44:08.935904Z",
+  "generated_at": "2026-06-03T11:02:03.224122Z",
   "source_pdf": "data/synthetic/synth_02/source.pdf",
-  "iterations_used": 25,
-  "tool_calls_used": 16
+  "iterations_used": 45,
+  "tool_calls_used": 29
 }

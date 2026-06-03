@@ -1,34 +1,47 @@
 {
   "patient": {
-    "value": null,
-    "status": "flagged",
+    "value": {
+      "name": "synth_05",
+      "age": "65",
+      "sex": "M",
+      "mrn": "000-00-0005"
+    },
+    "status": "filled",
     "citations": [
       {
         "page_no": 1,
         "doc_type": "admission_note",
-        "excerpt": "ADMISSION NOTE - Patient synth_05 - Post-operative recovery after open\ncholecystectomy.",
+        "excerpt": "ADMISSION NOTE - Patient synth_05 - Acute exacerbation of COPD with type 2 respiratory failure\nPatient Name: synth_05\nMRN: 000-00-0005\nAge: 65\nSex: M",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
     ],
-    "flag_reason": "Unable to find patient's age, date of birth, or MRN after multiple search attempts. Only the patient's name 'synth_05' was found.",
+    "flag_reason": null,
     "conflicts": null
   },
   "admission_date": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "Unable to determine admission date after multiple search attempts and tool calls. The `get_dates` tool consistently returned no results, and manual searches of the admission note did not reveal a date.",
-    "conflicts": null
-  },
-  "discharge_date": {
-    "value": "2024-03-10",
+    "value": "2026-07-14",
     "status": "filled",
     "citations": [
       {
-        "page_no": 6,
-        "doc_type": "discharge_summary",
-        "excerpt": "Discharged on\n2024-03-10.",
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "date 2026-07-14 on page 1 (admission_note)",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "discharge_date": {
+    "value": "2026-07-16",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 4,
+        "doc_type": "progress_note",
+        "excerpt": "discharge-context date 2026-07-16 on progress_note",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -37,13 +50,13 @@
     "conflicts": null
   },
   "principal_diagnosis": {
-    "value": "Post-operative recovery after open cholecystectomy",
+    "value": "Acute exacerbation of COPD with type 2 respiratory failure",
     "status": "filled",
     "citations": [
       {
         "page_no": 1,
         "doc_type": "admission_note",
-        "excerpt": "ADMISSION NOTE - Patient synth_05 - Post-operative recovery after open\ncholecystectomy",
+        "excerpt": "ADMISSION NOTE - Patient synth_05 - Acute exacerbation of COPD with type 2\nre",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -53,15 +66,17 @@
   },
   "secondary_diagnoses": {
     "value": [
-      "Hypertension",
-      "Type 2 Diabetes Mellitus"
+      "{'diagnosis': 'Hypertension', 'icd_10': 'I10'}",
+      "{'diagnosis': 'Type 2 diabetes mellitus', 'icd_10': 'E11.9'}",
+      "{'diagnosis': 'Atrial fibrillation', 'icd_10': 'I48.91'}",
+      "{'diagnosis': 'Ischemic heart disease', 'icd_10': 'I25.9'}"
     ],
     "status": "filled",
     "citations": [
       {
         "page_no": 1,
         "doc_type": "admission_note",
-        "excerpt": "Past Medical History: Hypertension, Type 2 Diabetes Mellitus.",
+        "excerpt": "PMH:\n- Hypertension\n- Type 2 diabetes mellitus\n- Atrial fibrillation (on warfarin)\n- Ischemic heart disease",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -70,27 +85,13 @@
     "conflicts": null
   },
   "hospital_course": {
-    "value": "Hospital course summary: The patient was admitted for post-operative recovery after an open cholecystectomy. The patient's pain was initially managed with a PCA and then transitioned to oral analgesics. Their diet was advanced to a soft diet, and they progressed to ambulating independently. The hospital course was uneventful, and the patient was discharged on post-operative day 3.",
+    "value": "Hospital course summary: This 68-year-old male was admitted on 2026-07-14 for an acute exacerbation of COPD, presenting with worsening shortness of breath, cough, and increased sputum production.",
     "status": "filled",
     "citations": [
       {
-        "page_no": 2,
-        "doc_type": "progress_note",
-        "excerpt": "PROGRESS NOTE ? Day 1 - Patient synth_05 - Post-operative recovery after open cholecystectomy. Patient is stable, vital signs are within normal limits. Pain is well-controlled with PCA. Diet advanced to clear liquids. Ambulating with assistance.",
-        "is_handwritten": false,
-        "transcription_confidence": 1.0
-      },
-      {
-        "page_no": 3,
-        "doc_type": "progress_note",
-        "excerpt": "PROGRESS NOTE ? Day 2 - Patient synth_05 - Post-operative recovery after open cholecystectomy. Patient continues to do well. PCA discontinued, transitioned to oral analgesics. Tolerating soft diet. Ambulating independently. Plan for discharge tomorrow if continues to progress.",
-        "is_handwritten": false,
-        "transcription_confidence": 1.0
-      },
-      {
-        "page_no": 6,
+        "page_no": 7,
         "doc_type": "discharge_summary",
-        "excerpt": "DISCHARGE ADVICE - Patient synth_05 - Post-operative recovery after open cholecystectomy. Hospital course was uneventful. Patient recovered well from surgery. Pain was managed effectively, and patient was able to ambulate and tolerate a diet prior to discharge. Discharged on post-operative day 3.",
+        "excerpt": "This 68-year-old male with a history of COPD, hypertension, type 2 diabetes mellitus, and atrial fibrillation was admitted on 2026-07-14 with an acute exacerbation of his COPD. He presented with worsening shortness of breath, cough, and increased sputum production.\n\nOn admission, he was in respirato",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -100,21 +101,23 @@
   },
   "procedures": {
     "value": [
-      "{'procedure_name': 'Open cholecystectomy', 'date': 'FLAGGED'}"
+      "{'procedure_name': 'Chest X-Ray (PA view)', 'date': '2026-07-14', 'icd_10_pcs': None, 'notes': 'Investigation performed on admission.'}",
+      "{'procedure_name': 'Sputum for Gram Stain, Culture & Sensitivity', 'date': '2026-07-14', 'icd_10_pcs': None, 'notes': 'Investigation performed on admission.'}",
+      "{'procedure_name': 'ECG', 'date': '2026-07-14', 'icd_10_pcs': None, 'notes': 'Investigation performed on admission.'}"
     ],
     "status": "filled",
     "citations": [
       {
         "page_no": 2,
         "doc_type": "progress_note",
-        "excerpt": "PROGRESS NOTE ? Day 1 - Patient synth_05 - Post-operative recovery after open\ncholecystectomy.",
+        "excerpt": "- Chest X-Ray PA view\nSputum for Gram Stain, Culture & Sensitivity\n- ECG\nReports awaited.",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       },
       {
-        "page_no": 3,
-        "doc_type": "progress_note",
-        "excerpt": "PROGRESS NOTE ? Day 2 - Patient synth_05 - Post-operative recovery after open\ncholecystectomy.",
+        "page_no": 7,
+        "doc_type": "discharge_summary",
+        "excerpt": "Chest X-ray showed features suggestive of COPD exacerbation.",
         "is_handwritten": false,
         "transcription_confidence": 1.0
       }
@@ -123,150 +126,202 @@
     "conflicts": null
   },
   "admission_medications": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content; citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail",
+    "value": [],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Medication History:\nPatient is on irregular treatment with inhalers.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "discharge_medications": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content; citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail",
+    "value": [
+      {
+        "name_as_written": "Augmentin",
+        "normalized_name": null,
+        "dose": "625mg",
+        "route": "Oral",
+        "frequency": "Twice a day",
+        "duration": "5 days"
+      },
+      {
+        "name_as_written": "Pan D",
+        "normalized_name": null,
+        "dose": null,
+        "route": "Oral",
+        "frequency": "Once a day (before breakfast)",
+        "duration": null
+      },
+      {
+        "name_as_written": "Dolo",
+        "normalized_name": null,
+        "dose": "650mg",
+        "route": "Oral",
+        "frequency": "As needed (SOS) for fever/pain",
+        "duration": null
+      },
+      {
+        "name_as_written": "Grilinctus Syrup",
+        "normalized_name": null,
+        "dose": "2 teaspoons",
+        "route": "Oral",
+        "frequency": "Three times a day (TDS)",
+        "duration": null
+      },
+      {
+        "name_as_written": "Duolin and Budocort respules",
+        "normalized_name": null,
+        "dose": null,
+        "route": "Nebulization",
+        "frequency": "Alternately every 4 hours",
+        "duration": null
+      },
+      {
+        "name_as_written": "Deriphyllin Retard",
+        "normalized_name": null,
+        "dose": "300mg",
+        "route": "Oral",
+        "frequency": "Twice a day",
+        "duration": null
+      },
+      {
+        "name_as_written": "Wysolone",
+        "normalized_name": null,
+        "dose": "20mg",
+        "route": "Oral",
+        "frequency": "Once a day for 5 days, then taper",
+        "duration": null
+      },
+      {
+        "name_as_written": "LMWH (Low Molecular Weight Heparin)",
+        "normalized_name": null,
+        "dose": "40mg",
+        "route": "Subcutaneous",
+        "frequency": "Once a day",
+        "duration": "5 days"
+      }
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 6,
+        "doc_type": "med_admin",
+        "excerpt": "Discharge Advice:\n- TAB AUGMENTIN 625MG 1-0-1 For 5 days\n- TAB PAN D 1-0-0\n- TAB DOLO 650MG SOS\n- SYP GRILINCTUS 2 tsf TDS\n- Nebulization with DUOLIN AND BUDOCORT respules alternatively every 4 hours\n- TAB DERIPHYLLIN RETARD 300 1-0-1\n- TAB Wysolone 20mg 1-0-0 for 5 days then taper\n- INJ LMWH 40MG 0",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "medication_changes": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "agent attempted FILLED but citations invalid (no citations); downgraded to FLAGGED by guardrail",
+    "value": [],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 6,
+        "doc_type": "med_admin",
+        "excerpt": "Full structured medication list from discharge summary.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Full structured medication list from admission note.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "allergies": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "Unable to find any documentation of patient's allergies after multiple search attempts.",
+    "value": [
+      "{'status': 'No known drug allergies'}"
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "No known drug allergies.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "follow_up": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail",
+    "value": "['Follow up with Dr. synth_05_doc_1 in 5 days']",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 7,
+        "doc_type": "discharge_summary",
+        "excerpt": "Follow up with Dr. synth_05_doc_1 after 5 days.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "pending_results": {
     "value": null,
     "status": "flagged",
     "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "flag_reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail",
     "conflicts": null
   },
   "discharge_condition": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": "Patient is being discharged in a stable condition.",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 7,
+        "doc_type": "discharge_summary",
+        "excerpt": "Patient is being discharged in a stable condition.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "drug_interactions": {
-    "value": null,
-    "status": "flagged",
-    "citations": [],
-    "flag_reason": "loop ended without commit — clinician must decide",
+    "value": [],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 6,
+        "doc_type": "med_admin",
+        "excerpt": "Discharge Medications:\n1. TAB AUGMENTIN 625mg Oral 1-0-1 for 5 days\n2. TAB PAN 40mg Oral 1-0-0\n3. TAB LEVOLIN 1mg Oral 1-0-1\n4. DUOLIN RESPULES 1-1-1\n5. BUDATE RESPULES 1-1-1\n6. TAB DOLO 650mg Oral SOS",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
     "conflicts": null
   },
   "safety_flags": [
     {
-      "field": "admission_date",
-      "reason": "per-field tool-call cap (8) exceeded without sufficient evidence — clinician must decide",
-      "severity": "medium",
-      "raised_at_step": 12,
-      "citations": []
-    },
-    {
-      "field": "admission_date",
-      "reason": "Unable to determine admission date after multiple search attempts and tool calls. The `get_dates` tool consistently returned no results, and manual searches of the admission note did not reveal a date.",
-      "severity": "high",
-      "raised_at_step": 12,
-      "citations": []
-    },
-    {
-      "field": "demographics",
-      "reason": "Unable to find patient's age, date of birth, or MRN after multiple search attempts. Only the patient's name 'synth_05' was found.",
-      "severity": "medium",
-      "raised_at_step": 17,
-      "citations": [
-        {
-          "page_no": 1,
-          "doc_type": "admission_note",
-          "excerpt": "ADMISSION NOTE - Patient synth_05 - Post-operative recovery after open\ncholecystectomy.",
-          "is_handwritten": false,
-          "transcription_confidence": 1.0
-        }
-      ]
-    },
-    {
-      "field": "admission_medications",
-      "reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content; citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail",
-      "severity": "medium",
-      "raised_at_step": 46,
-      "citations": []
-    },
-    {
-      "field": "discharge_medications",
-      "reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content; citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail",
-      "severity": "medium",
-      "raised_at_step": 50,
-      "citations": []
-    },
-    {
-      "field": "medication_changes",
-      "reason": "agent attempted FILLED but citations invalid (no citations); downgraded to FLAGGED by guardrail",
-      "severity": "medium",
-      "raised_at_step": 52,
-      "citations": []
-    },
-    {
-      "field": "allergies",
-      "reason": "Unable to find any documentation of patient's allergies after multiple search attempts.",
-      "severity": "medium",
-      "raised_at_step": 56,
-      "citations": []
-    },
-    {
-      "field": "follow_up",
-      "reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail",
-      "severity": "medium",
-      "raised_at_step": 58,
-      "citations": []
-    },
-    {
       "field": "pending_results",
-      "reason": "loop ended without commit — clinician must decide",
+      "reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail",
       "severity": "medium",
-      "raised_at_step": 60,
-      "citations": []
-    },
-    {
-      "field": "discharge_condition",
-      "reason": "loop ended without commit — clinician must decide",
-      "severity": "medium",
-      "raised_at_step": 60,
-      "citations": []
-    },
-    {
-      "field": "drug_interactions",
-      "reason": "loop ended without commit — clinician must decide",
-      "severity": "medium",
-      "raised_at_step": 60,
+      "raised_at_step": 39,
       "citations": []
     }
   ],
-  "generated_at": "2026-06-03T05:44:54.193590Z",
+  "generated_at": "2026-06-03T11:03:42.767114Z",
   "source_pdf": "data/synthetic/synth_05/source.pdf",
-  "iterations_used": 60,
-  "tool_calls_used": 48
+  "iterations_used": 43,
+  "tool_calls_used": 26
 }

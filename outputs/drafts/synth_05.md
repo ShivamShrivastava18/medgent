@@ -1,79 +1,98 @@
 # Discharge Summary Draft
 
-_Generated 2026-06-03T05:44:54.193590+00:00_  ·  source: `data/synthetic/synth_05/source.pdf`
+_Generated 2026-06-03T11:03:42.767114+00:00_  ·  source: `data/synthetic/synth_05/source.pdf`
 
-**Agent metrics:** 60 iterations, 48 tool calls
+**Agent metrics:** 43 iterations, 26 tool calls
 
-**Safety flags:** 11
+**Safety flags:** 1
 
-## Patient demographics  —  **FLAGGED**
-> Unable to find patient's age, date of birth, or MRN after multiple search attempts. Only the patient's name 'synth_05' was found.
+## Patient demographics
+- **name:** synth_05
+- **age:** 65
+- **sex:** M
+- **mrn:** 000-00-0005
 
-## Admission date  —  **FLAGGED**
-> Unable to determine admission date after multiple search attempts and tool calls. The `get_dates` tool consistently returned no results, and manual searches of the admission note did not reveal a date.
+_Sources: p.1_
+
+## Admission date
+2026-07-14
+
+_Sources: p.1_
 
 ## Discharge date
-2024-03-10
+2026-07-16
 
-_Sources: p.6_
+_Sources: p.4_
 
 ## Principal diagnosis
-Post-operative recovery after open cholecystectomy
+Acute exacerbation of COPD with type 2 respiratory failure
 
 _Sources: p.1_
 
 ## Secondary diagnoses
-- Hypertension
-- Type 2 Diabetes Mellitus
+- {'diagnosis': 'Hypertension', 'icd_10': 'I10'}
+- {'diagnosis': 'Type 2 diabetes mellitus', 'icd_10': 'E11.9'}
+- {'diagnosis': 'Atrial fibrillation', 'icd_10': 'I48.91'}
+- {'diagnosis': 'Ischemic heart disease', 'icd_10': 'I25.9'}
 
 _Sources: p.1_
 
 ## Hospital course
-Hospital course summary: The patient was admitted for post-operative recovery after an open cholecystectomy. The patient's pain was initially managed with a PCA and then transitioned to oral analgesics. Their diet was advanced to a soft diet, and they progressed to ambulating independently. The hospital course was uneventful, and the patient was discharged on post-operative day 3.
+Hospital course summary: This 68-year-old male was admitted on 2026-07-14 for an acute exacerbation of COPD, presenting with worsening shortness of breath, cough, and increased sputum production.
 
-_Sources: p.2, p.3, p.6_
+_Sources: p.7_
 
 ## Procedures
-- {'procedure_name': 'Open cholecystectomy', 'date': 'FLAGGED'}
+- {'procedure_name': 'Chest X-Ray (PA view)', 'date': '2026-07-14', 'icd_10_pcs': None, 'notes': 'Investigation performed on admission.'}
+- {'procedure_name': 'Sputum for Gram Stain, Culture & Sensitivity', 'date': '2026-07-14', 'icd_10_pcs': None, 'notes': 'Investigation performed on admission.'}
+- {'procedure_name': 'ECG', 'date': '2026-07-14', 'icd_10_pcs': None, 'notes': 'Investigation performed on admission.'}
 
-_Sources: p.2, p.3_
+_Sources: p.2, p.7_
 
-## Admission medications  —  **FLAGGED**
-> agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content; citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail
+## Admission medications
 
-## Discharge medications  —  **FLAGGED**
-> agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content; citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail
+_Sources: p.1_
 
-## Medication changes  —  **FLAGGED**
-> agent attempted FILLED but citations invalid (no citations); downgraded to FLAGGED by guardrail
+## Discharge medications
+- name_as_written=Augmentin, dose=625mg, route=Oral, frequency=Twice a day, duration=5 days
+- name_as_written=Pan D, route=Oral, frequency=Once a day (before breakfast)
+- name_as_written=Dolo, dose=650mg, route=Oral, frequency=As needed (SOS) for fever/pain
+- name_as_written=Grilinctus Syrup, dose=2 teaspoons, route=Oral, frequency=Three times a day (TDS)
+- name_as_written=Duolin and Budocort respules, route=Nebulization, frequency=Alternately every 4 hours
+- name_as_written=Deriphyllin Retard, dose=300mg, route=Oral, frequency=Twice a day
+- name_as_written=Wysolone, dose=20mg, route=Oral, frequency=Once a day for 5 days, then taper
+- name_as_written=LMWH (Low Molecular Weight Heparin), dose=40mg, route=Subcutaneous, frequency=Once a day, duration=5 days
 
-## Drug interactions  —  **FLAGGED**
-> loop ended without commit — clinician must decide
+_Sources: p.6_
 
-## Allergies  —  **FLAGGED**
-> Unable to find any documentation of patient's allergies after multiple search attempts.
+## Medication changes
 
-## Follow-up instructions  —  **FLAGGED**
-> agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail
+_Sources: p.6, p.1_
+
+## Drug interactions
+
+_Sources: p.6_
+
+## Allergies
+- {'status': 'No known drug allergies'}
+
+_Sources: p.1_
+
+## Follow-up instructions
+['Follow up with Dr. synth_05_doc_1 in 5 days']
+
+_Sources: p.7_
 
 ## Pending results  —  **FLAGGED**
-> loop ended without commit — clinician must decide
+> agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail
 
-## Discharge condition  —  **FLAGGED**
-> loop ended without commit — clinician must decide
+## Discharge condition
+Patient is being discharged in a stable condition.
+
+_Sources: p.7_
 
 ## Safety flags raised
-- **[medium]** `admission_date` — per-field tool-call cap (8) exceeded without sufficient evidence — clinician must decide
-- **[high]** `admission_date` — Unable to determine admission date after multiple search attempts and tool calls. The `get_dates` tool consistently returned no results, and manual searches of the admission note did not reveal a date.
-- **[medium]** `demographics` — Unable to find patient's age, date of birth, or MRN after multiple search attempts. Only the patient's name 'synth_05' was found.
-- **[medium]** `admission_medications` — agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content; citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail
-- **[medium]** `discharge_medications` — agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content; citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail
-- **[medium]** `medication_changes` — agent attempted FILLED but citations invalid (no citations); downgraded to FLAGGED by guardrail
-- **[medium]** `allergies` — Unable to find any documentation of patient's allergies after multiple search attempts.
-- **[medium]** `follow_up` — agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail
-- **[medium]** `pending_results` — loop ended without commit — clinician must decide
-- **[medium]** `discharge_condition` — loop ended without commit — clinician must decide
-- **[medium]** `drug_interactions` — loop ended without commit — clinician must decide
+- **[medium]** `pending_results` — agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail
 
 
 ---

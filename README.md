@@ -142,6 +142,23 @@ improvement that cannot erode safety):
   from removing flags, but a sufficiently determined adversarial policy could attempt
   more subtle drift; production would need a separate compliance check.
 
+## A note on the synthetic data
+
+The provided patient PDF is itself synthetic (Canva-rendered, "Author: Akshay V.
+Nayak" in the file metadata) but designed to mirror real Indian tertiary-care chart
+style — typed discharge narratives, handwritten ER/nursing forms, lab forms,
+photographed investigations, all using Indian brand names and DD/MM/YY dates. The
+synthetic cohort generated here is also entirely fictional, but the Gemini-Pro
+generator is now prompted to match that same Indian style (IRDAI-mandated discharge
+section headers, brand-name drug catalog drawn from public Medindia / CIMS
+references, Indian patient name conventions like `Ramesh K. Reddy, 56/M`, hospital
+names like `Care Multispeciality Hospital, Jaipur`). **No real patient data is used
+anywhere in this project.**
+
+References used to inform the synthetic style (no patient data fetched):
+- IRDAI standard discharge-summary section structure (DIAGNOSIS / CHIEF COMPLAINTS / HOPI / etc.)
+- Public Medindia / CIMS-style Indian brand-name drug references
+
 ## What I would do with more time
 
 1. **Per-page handwriting visual re-pass**: pages with low transcription confidence
@@ -240,27 +257,36 @@ Outputs at `outputs/drafts/patient_2.{json,md}` and `outputs/traces/patient_2.{j
 
 ## Results — Part 2
 
-5 synthetic patients generated (`data/synthetic/synth_{01..05}`), each with three
-planted forms of messiness (pending lab, undocumented med change, conflicting
-diagnosis). Split 3 train / 2 holdout, 3 learning iterations.
+5 synthetic patients generated (`data/synthetic/synth_{01..05}`) in the style of the
+provided real patient PDF — Indian tertiary-care charts with IRDAI-standard discharge
+sections, DD/MM/YY dates, and brand-name medications drawn from a public Medindia /
+CIMS-style reference (TAB DOLO, INJ MONOCEF, TAB PAN-40, INJ EMESET, …). Each
+patient has three planted forms of messiness (pending lab, undocumented med change,
+conflicting diagnosis). Split 3 train / 2 holdout, 3 learning iterations.
 
 Holdout `edit_distance_norm` (overall mean, lower is better):
 
 | iteration | overall | sec.hospital_course | rules_total |
 |---:|---:|---:|---:|
-| 0 (baseline) | **0.0083** | **0.0830** | 0 |
-| 1 | 0.00084 | 0.0084 | 2 |
-| 2 | 0.00081 | 0.0081 | 2 |
-| 3 | 0.00118 | 0.0118 | 2 |
+| 0 (baseline) | **0.04446** | **0.16009** | 0 |
+| 1 | 0.02924 | 0.00784 | 5 |
+| 2 | 0.02924 | 0.00784 | 5 |
+| 3 | 0.02923 | 0.00778 | 5 |
 
-**~10× drop in edit-distance-norm from iter 0 → iter 1**, and the rule store accumulates
-2 rules (`reorder_severity` for secondary diagnoses, `text_change` for the
-hospital-course opener). `safety_preservation` stays at **1.0** every iteration — the
-rule-injection guard rejects any rule whose hint references safety_flags, and the
-verifier is excluded from the learning loop entirely. `field_retention` 0.9 means 1
-field out of 10 still gets edited (hospital_course gains sentence-level line breaks
-the reviewer wants — this signal is still being absorbed and would converge with
-more training data).
+**Hospital-course edit-distance drops ~95% from iter 0 → iter 1** (0.160 → 0.008)
+and overall mean drops ~35%. The rule store accumulates **5 rules**:
+
+1. `hospital_course / text_change` (freq 9) — open with `Hospital course summary:`
+2. `discharge_medications / brand_rename` (freq 6) — render `<generic> (Brand)` for
+   Indian brand-only entries (this rule now fires precisely because the cohort uses
+   real Indian brand names, not US generics)
+3. `pending_results / pending_date_suffix` (freq 6) — append `(pending as of <date>)`
+4. `admission_medications / brand_rename` (freq 3)
+5. `discharge_medications / text_change` (freq 3)
+
+`safety_preservation` stays at **1.0** every iteration — the rule-injection guard
+rejects any rule whose hint references safety_flags, and the verifier is excluded
+from the learning loop entirely.
 
 Artifacts:
 - `outputs/learning_curve.png` — holdout edit-distance-norm + safety_preservation curve
