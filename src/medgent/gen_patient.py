@@ -119,13 +119,21 @@ def render_to_pdf(sections: SyntheticPatientSections, out_path: Path) -> Path:
         ("MEDICATION RECORD", sections.medication_record),
         ("DISCHARGE ADVICE", sections.discharge_advice),
     ]
+    def _safe_para(s: str, max_word: int = 30) -> str:
+        """Replace non-ASCII chars and split very long words so fpdf's WORD wrap doesn't choke."""
+        s = s.encode("ascii", "replace").decode()
+        return " ".join(
+            (w if len(w) <= max_word else " ".join(w[i : i + max_word] for i in range(0, len(w), max_word)))
+            for w in s.split()
+        )
+
     for title, body in page_order:
         pdf.add_page()
         pdf.set_font("Helvetica", "B", 13)
         pdf.multi_cell(
             0, 7,
-            txt=f"{title}  -  Patient {sections.patient_id}  -  {sections.condition}",
-            wrapmode="CHAR",
+            text=_safe_para(f"{title}  -  Patient {sections.patient_id}  -  {sections.condition}"),
+            new_x="LMARGIN", new_y="NEXT",
         )
         pdf.ln(1)
         pdf.set_font("Helvetica", "", 10)
@@ -134,12 +142,11 @@ def render_to_pdf(sections: SyntheticPatientSections, out_path: Path) -> Path:
             if not para:
                 pdf.ln(2)
                 continue
-            ascii_para = para.encode("ascii", "replace").decode()
+            safe = _safe_para(para)
             try:
-                pdf.multi_cell(0, 5, txt=ascii_para, wrapmode="CHAR")
+                pdf.multi_cell(0, 5, text=safe, new_x="LMARGIN", new_y="NEXT")
             except Exception:
-                # Last resort: truncate
-                pdf.multi_cell(0, 5, txt=ascii_para[:500] + " ...", wrapmode="CHAR")
+                pdf.multi_cell(0, 5, text=safe[:500] + " ...", new_x="LMARGIN", new_y="NEXT")
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     pdf.output(str(out_path))

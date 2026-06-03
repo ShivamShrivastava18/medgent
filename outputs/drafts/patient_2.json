@@ -1,0 +1,388 @@
+{
+  "patient": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "Patient demographic information (e.g., name, MRN, DOB) could not be located in the provided source notes after multiple search attempts.",
+    "conflicts": null
+  },
+  "admission_date": {
+    "value": "2026-02-28",
+    "status": "flagged",
+    "citations": [
+      {
+        "page_no": 19,
+        "doc_type": "nurses_note",
+        "excerpt": "admission-context date 2026-02-28 on nurses_note",
+        "is_handwritten": true,
+        "transcription_confidence": 0.6
+      },
+      {
+        "page_no": 19,
+        "doc_type": "nurses_note",
+        "excerpt": "NURSES NOTES\nKnown Drug Allergies\n28/2/26 -Not known\nDate & Time Observation /",
+        "is_handwritten": true,
+        "transcription_confidence": 0.6
+      }
+    ],
+    "flag_reason": "all supporting citations are low-confidence handwritten; downgraded FILLED → FLAGGED by handwriting floor",
+    "conflicts": null
+  },
+  "discharge_date": {
+    "value": "2026-03-09",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 2,
+        "doc_type": "discharge_summary",
+        "excerpt": "discharge-context date 2026-03-09 on discharge_summary",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "principal_diagnosis": {
+    "value": "Acute gastroenteritis with dehydration",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "DIAGNOSIS:\n1) ACUTE GASTROENTERITIS WITH DEHYDRATION\n2) URINARY TRACT INFECTI",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "secondary_diagnoses": {
+    "value": [
+      "Urinary Tract Infection"
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "DIAGNOSIS:\n1) ACUTE GASTROENTERITIS WITH DEHYDRATION\n2) URINARY TRACT INFECTION",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "hospital_course": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "Could not find a summary of the patient's hospital course in the available documents after multiple search attempts.",
+    "conflicts": null
+  },
+  "procedures": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "No information regarding procedures performed during the hospital stay was found in the available documents after multiple search attempts.",
+    "conflicts": null
+  },
+  "admission_medications": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "Could not find a list of the patient's admission or home medications after using both the get_medications tool and a keyword search.",
+    "conflicts": null
+  },
+  "discharge_medications": {
+    "value": [
+      {
+        "name_as_written": "RACIPER",
+        "normalized_name": null,
+        "dose": "40MG",
+        "route": "PO",
+        "frequency": "1-0-0",
+        "duration": "7 DAYS"
+      },
+      {
+        "name_as_written": "ULTRACET",
+        "normalized_name": null,
+        "dose": null,
+        "route": "PO",
+        "frequency": "1-0-1",
+        "duration": "3 DAYS"
+      },
+      {
+        "name_as_written": "ZUCOL",
+        "normalized_name": null,
+        "dose": "10MG",
+        "route": "PO",
+        "frequency": "0-0-1",
+        "duration": "15 DAYS"
+      },
+      {
+        "name_as_written": "PAN",
+        "normalized_name": null,
+        "dose": "40MG",
+        "route": "PO",
+        "frequency": "1-0-0",
+        "duration": "15 DAYS"
+      },
+      {
+        "name_as_written": "CLAVAM",
+        "normalized_name": null,
+        "dose": "625MG",
+        "route": "PO",
+        "frequency": "1-1-1",
+        "duration": "5 DAYS"
+      },
+      {
+        "name_as_written": "DOLO",
+        "normalized_name": null,
+        "dose": "650MG",
+        "route": "PO",
+        "frequency": "SOS",
+        "duration": null
+      },
+      {
+        "name_as_written": "CREMAFFIN",
+        "normalized_name": null,
+        "dose": "3TSP",
+        "route": "PO",
+        "frequency": "HS",
+        "duration": "5 DAYS"
+      },
+      {
+        "name_as_written": "A TO Z",
+        "normalized_name": null,
+        "dose": null,
+        "route": "PO",
+        "frequency": "1-0-0",
+        "duration": "15 DAYS"
+      }
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 2,
+        "doc_type": "discharge_summary",
+        "excerpt": "Medications: TAB. RACIPER 40MG 1-0-0 7 DAYS, TAB. ULTRACET 1-0-1 3 DAYS, TAB. ZUCOL 10MG 0-0-1 15 DAYS, TAB. PAN 40MG 1-0-0 15 DAYS, TAB. CLAVAM 625MG 1-1-1 5 DAYS, TAB. DOLO 650MG SOS, SYP. CREMAFFIN 3TSP HS 5 DAYS, TAB. A TO Z 1-0-0 15 DAYS",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "medication_changes": {
+    "value": [
+      {
+        "medication_name": "loperamide",
+        "normalized_name": null,
+        "change_type": "added",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": null,
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "metronidazole",
+        "normalized_name": null,
+        "change_type": "added",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": null,
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "ondansetron",
+        "normalized_name": null,
+        "change_type": "added",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": null,
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "dicyclomine",
+        "normalized_name": null,
+        "change_type": "added",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": null,
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "ULTRACET",
+        "normalized_name": null,
+        "change_type": "added",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": null,
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "ORS",
+        "normalized_name": null,
+        "change_type": "added",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": null,
+        "needs_reconciliation": false,
+        "citations": []
+      },
+      {
+        "medication_name": "RACIPER",
+        "normalized_name": null,
+        "change_type": "added",
+        "prior_value": null,
+        "new_value": null,
+        "documented_reason": null,
+        "needs_reconciliation": false,
+        "citations": []
+      }
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 2,
+        "doc_type": "discharge_summary",
+        "excerpt": "ADVICE ON DISCHARGE\n1. TAB. RACIPER 40MG 1-0-0 7 DAYS\n2. TAB. ULTRACET 1-0-1 3 DAYS\n3. TAB. LOPIRAMIDE 1-0-1 3 DAYS\n4. TAB. METROGYL 400MG 1-1-1 5 DAYS\n5. TAB. EMESET 4MG 1-0-1 3 DAYS\n6. TAB. DICYCLOMINE 1-1-1 3 DAYS\n7. ORS POWDER 1 SPOON IN 1 GLASS OF WATER AS AND WHEN REQUIRED",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "allergies": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "No information regarding patient allergies was found in the record after a keyword search.",
+    "conflicts": null
+  },
+  "follow_up": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "No information regarding follow-up instructions was found in the record after multiple keyword searches.",
+    "conflicts": null
+  },
+  "pending_results": {
+    "value": [
+      "No pending results were found in the record."
+    ],
+    "status": "missing",
+    "citations": [],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "discharge_condition": {
+    "value": null,
+    "status": "flagged",
+    "citations": [
+      {
+        "page_no": 2,
+        "doc_type": "discharge_summary",
+        "excerpt": "IV antibiotics, IV PPI's, IV antiemetics and other supportive measures. USG...",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": "No information regarding the patient's condition at the time of discharge was found in the record after multiple keyword searches.",
+    "conflicts": null
+  },
+  "drug_interactions": {
+    "value": [],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 2,
+        "doc_type": "discharge_summary",
+        "excerpt": "DISCHARGE ADVICE:\n1) TAB. RACIPER 40MG 1-0-0 7 DAYS\n2) TAB. ZIFI 200MG 1-0-1 5 DAYS\n3) TAB. DOLOKIND-M SOS\n4) TAB. MEFTAL SPAS SOS\n5) CAP. VIBILAC 1-0-1 5 DAYS\n6) TAB. ONDEM 4MG SOS\n7) TAB. ZENTEL 400MG 1 HS\n8) ORS AS REQUIRED",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "safety_flags": [
+    {
+      "field": "demographics",
+      "reason": "Patient demographic information (e.g., name, MRN, DOB) could not be located in the provided source notes after multiple search attempts.",
+      "severity": "high",
+      "raised_at_step": 6,
+      "citations": []
+    },
+    {
+      "field": "admission_date",
+      "reason": "all supporting citations are low-confidence handwritten; downgraded FILLED → FLAGGED by handwriting floor",
+      "severity": "medium",
+      "raised_at_step": 7,
+      "citations": []
+    },
+    {
+      "field": "hospital_course",
+      "reason": "Could not find a summary of the patient's hospital course in the available documents after multiple search attempts.",
+      "severity": "medium",
+      "raised_at_step": 16,
+      "citations": []
+    },
+    {
+      "field": "procedures",
+      "reason": "No information regarding procedures performed during the hospital stay was found in the available documents after multiple search attempts.",
+      "severity": "medium",
+      "raised_at_step": 19,
+      "citations": []
+    },
+    {
+      "field": "admission_medications",
+      "reason": "Could not find a list of the patient's admission or home medications after using both the get_medications tool and a keyword search.",
+      "severity": "medium",
+      "raised_at_step": 22,
+      "citations": []
+    },
+    {
+      "field": "allergies",
+      "reason": "No information regarding patient allergies was found in the record after a keyword search.",
+      "severity": "medium",
+      "raised_at_step": 28,
+      "citations": []
+    },
+    {
+      "field": "follow_up",
+      "reason": "No information regarding follow-up instructions was found in the record after multiple keyword searches.",
+      "severity": "medium",
+      "raised_at_step": 31,
+      "citations": []
+    },
+    {
+      "field": "discharge_condition",
+      "reason": "No information regarding the patient's condition at the time of discharge was found in the record after multiple keyword searches.",
+      "severity": "medium",
+      "raised_at_step": 38,
+      "citations": [
+        {
+          "page_no": 2,
+          "doc_type": "discharge_summary",
+          "excerpt": "IV antibiotics, IV PPI's, IV antiemetics and other supportive measures. USG...",
+          "is_handwritten": false,
+          "transcription_confidence": 1.0
+        }
+      ]
+    }
+  ],
+  "generated_at": "2026-06-03T04:35:37.432624Z",
+  "source_pdf": "data/patients/patient_2/source.pdf",
+  "iterations_used": 42,
+  "tool_calls_used": 26
+}
