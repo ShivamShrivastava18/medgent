@@ -1,0 +1,20 @@
+{
+  "rules": [
+    {
+      "section": "secondary_diagnoses",
+      "pattern_kind": "reorder_severity",
+      "hint": "Order secondary diagnoses by clinical severity (most severe first); tie-break alphabetically.",
+      "frequency": 3,
+      "example_before": "{'diagnosis': 'Hypertension', 'type': 'chronic'} | {'diagnosis': 'Type 2 Diabetes Mellitus', 'type': 'chronic'} | {'diagnosis': 'Hyperlipidemia', 'type': 'chronic'} | {'diagnosis': 'Coronary Artery Di",
+      "example_after": "{'diagnosis': 'Hypertension', 'type': 'chronic'} | {'diagnosis': 'Type 2 Diabetes Mellitus', 'type': 'chronic'} | {'diagnosis': 'Chronic Obstructive Pulmonary Disease (COPD), Gold stage 3', 'type': 'c"
+    },
+    {
+      "section": "hospital_course",
+      "pattern_kind": "text_change",
+      "hint": "Open the hospital_course narrative with the exact header 'Hospital course summary:' followed by one space. Break sentences with newlines.",
+      "frequency": 9,
+      "example_before": "Hospital course summary: Penelope Chen was admitted for community-acquired pneumonia, presenting with cough, fever, and shortness of breath. She was treated with intravenous Ceftriaxone and supplement",
+      "example_after": "Hospital course summary: Penelope Chen was admitted for community-acquired pneumonia, presenting with cough, fever, and shortness of breath.\nShe was treated with intravenous Ceftriaxone and supplement"
+    }
+  ]
+}

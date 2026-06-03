@@ -233,12 +233,28 @@ Outputs at `outputs/drafts/patient_2.{json,md}` and `outputs/traces/patient_2.{j
 planted forms of messiness (pending lab, undocumented med change, conflicting
 diagnosis). Split 3 train / 2 holdout, 3 learning iterations.
 
-- See `outputs/learning_curve.png` for the holdout edit-distance-norm curve.
-- See `outputs/learning_metrics.json` for raw per-iteration metrics.
-- See `outputs/memory.json` for the accumulated Rule store after training.
-- `safety_preservation` should stay at 1.0 throughout — the rule-injection guard
-  rejects any rule whose hint references safety_flags, and the verifier is excluded
-  from the learning loop entirely.
+Holdout `edit_distance_norm` (overall mean, lower is better):
+
+| iteration | overall | sec.hospital_course | rules_total |
+|---:|---:|---:|---:|
+| 0 (baseline) | **0.0083** | **0.0830** | 0 |
+| 1 | 0.00084 | 0.0084 | 2 |
+| 2 | 0.00081 | 0.0081 | 2 |
+| 3 | 0.00118 | 0.0118 | 2 |
+
+**~10× drop in edit-distance-norm from iter 0 → iter 1**, and the rule store accumulates
+2 rules (`reorder_severity` for secondary diagnoses, `text_change` for the
+hospital-course opener). `safety_preservation` stays at **1.0** every iteration — the
+rule-injection guard rejects any rule whose hint references safety_flags, and the
+verifier is excluded from the learning loop entirely. `field_retention` 0.9 means 1
+field out of 10 still gets edited (hospital_course gains sentence-level line breaks
+the reviewer wants — this signal is still being absorbed and would converge with
+more training data).
+
+Artifacts:
+- `outputs/learning_curve.png` — holdout edit-distance-norm + safety_preservation curve
+- `outputs/learning_metrics.json` — raw per-iteration metrics
+- `outputs/memory.json` — accumulated Rule store after training
 
 ## What's done vs. open
 

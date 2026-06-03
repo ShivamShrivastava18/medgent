@@ -5,8 +5,6 @@ __pycache__/
 .pages/
 outputs/index/
 outputs/agent_states/
-outputs/memory.json
-outputs/learning_metrics.json
 *.egg-info/
 .pytest_cache/
 .DS_Store
