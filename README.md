@@ -210,6 +210,36 @@ plot_metrics(metrics, Path('outputs/learning_curve.png'))
 "
 ```
 
+## Results — real patient (`patient_2`)
+
+Running the agent end-to-end on the provided 71-page PDF:
+
+- **42 loop iterations, 26 tool calls, 8 safety flags raised.**
+- `discharge_date`, `principal_diagnosis`, `secondary_diagnoses`, `discharge_medications`,
+  `medication_changes`, `drug_interactions` were committed FILLED with citations.
+- `admission_date` was downgraded `FILLED → FLAGGED` by the schema-level
+  handwriting-confidence floor — every supporting citation came from low-confidence
+  handwritten notes. **This is the structural safety story; the type system caught
+  what the planner missed.** See trace step 7 in `outputs/traces/patient_2.md`.
+- `hospital_course`, `procedures`, `allergies`, `follow_up`, `discharge_condition`
+  flagged with honest "could not find after multiple search attempts" — the agent did
+  not invent narrative.
+
+Outputs at `outputs/drafts/patient_2.{json,md}` and `outputs/traces/patient_2.{jsonl,md}`.
+
+## Results — Part 2
+
+5 synthetic patients generated (`data/synthetic/synth_{01..05}`), each with three
+planted forms of messiness (pending lab, undocumented med change, conflicting
+diagnosis). Split 3 train / 2 holdout, 3 learning iterations.
+
+- See `outputs/learning_curve.png` for the holdout edit-distance-norm curve.
+- See `outputs/learning_metrics.json` for raw per-iteration metrics.
+- See `outputs/memory.json` for the accumulated Rule store after training.
+- `safety_preservation` should stay at 1.0 throughout — the rule-injection guard
+  rejects any rule whose hint references safety_flags, and the verifier is excluded
+  from the learning loop entirely.
+
 ## What's done vs. open
 
 - [x] Stage 0 PDF index with encounter clustering
@@ -224,4 +254,7 @@ plot_metrics(metrics, Path('outputs/learning_curve.png'))
 - [x] Synthetic patient generator (typed PDFs with planted messiness)
 - [x] Simulated reviewer (hidden 5-rule policy)
 - [x] Diff analyzer + correction memory + train loop + plot
+- [x] Smoke tests for safety machinery (`pytest tests/`)
 - [ ] Negative-test corpus to score verifier strip rate directly (future work)
+- [ ] Per-page low-confidence handwriting re-pass (future work)
+- [ ] Semantic search (embeddings) over the index (future work)
