@@ -96,14 +96,21 @@ def call_structured(
     temperature: float = 0.1,
     max_output_tokens: int = 8192,
     thinking_budget: Optional[int] = None,
+    use_response_schema: bool = True,
 ) -> BaseModel:
-    """Prompt → instance of `schema`. Strict JSON mode via response_schema."""
+    """Prompt → instance of `schema`.
+
+    Vertex rejects response_schema that contain Any/loose-dict fields. For those,
+    call with use_response_schema=False — we ask for JSON output mode and parse
+    with Pydantic on our side.
+    """
     cfg_kwargs: dict[str, Any] = {
         "temperature": temperature,
         "max_output_tokens": max_output_tokens,
         "response_mime_type": "application/json",
-        "response_schema": schema,
     }
+    if use_response_schema:
+        cfg_kwargs["response_schema"] = schema
     if system:
         cfg_kwargs["system_instruction"] = system
     if thinking_budget is not None:
@@ -117,13 +124,18 @@ def call_structured(
             contents=prompt,
             config=cfg,
         )
-        # google-genai returns parsed objects on resp.parsed when response_schema is set
-        if getattr(resp, "parsed", None) is not None:
+        if use_response_schema and getattr(resp, "parsed", None) is not None:
             return resp.parsed  # type: ignore[return-value]
-        # Fallback: parse JSON ourselves
         raw = (resp.text or "").strip()
         if not raw:
             raise GeminiError("empty structured response")
+        # Tolerate ```json fences
+        if raw.startswith("```"):
+            raw = raw.strip("`")
+            if raw.lower().startswith("json"):
+                raw = raw[4:].strip()
+            if raw.endswith("```"):
+                raw = raw[:-3].strip()
         try:
             data = json.loads(raw)
             return schema.model_validate(data)

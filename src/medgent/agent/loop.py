@@ -302,6 +302,7 @@ def run_agent(idx: PatientIndex, *, max_iterations: int = config.MAX_ITERATIONS)
                 model=config.MODEL_PRO,
                 temperature=0.2,
                 max_output_tokens=2048,
+                use_response_schema=False,  # AgentAction has Any/dict fields Vertex rejects
             )
         except GeminiError as exc:
             log.error("planner LLM failed: %s — flagging step", exc)
