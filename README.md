@@ -7,8 +7,6 @@ discharge-summary **draft for clinician review**. Built around the brief's #1 ev
 criterion: **clinical safety above all** — the agent refuses to invent facts, surfaces
 conflicts, flags pending data, and emits a readable step trace.
 
-The full design is at [`docs/superpowers/specs/2026-06-03-dscribe-discharge-summary-design.md`](docs/superpowers/specs/2026-06-03-dscribe-discharge-summary-design.md).
-
 ---
 
 ## Architecture (4 stages, ReAct loop in the middle)
