@@ -165,6 +165,25 @@ def _coerce_value(field: str, raw: Any) -> Any:
 
 
 def _slot_to_valuedfield(slot: FieldSlot, _coerce=None) -> ValuedField:
+    # FLAGGED/MISSING/PENDING/CONFLICTING fields carry no value — coercion would only
+    # invent a type-mismatch (e.g. a proposed-but-rejected string into a list[str] slot).
+    if slot.status != FieldStatus.FILLED:
+        try:
+            return ValuedField(
+                value=None,
+                status=slot.status,
+                citations=slot.citations,
+                flag_reason=slot.flag_reason or "agent did not commit a value",
+                conflicts=slot.conflicts,
+            )
+        except Exception as exc:
+            return ValuedField(
+                value=None,
+                status=FieldStatus.FLAGGED,
+                citations=slot.citations,
+                flag_reason=f"compose validation failed: {exc}",
+            )
+
     value = _coerce(slot.proposed_value) if _coerce and slot.proposed_value is not None else slot.proposed_value
     try:
         return ValuedField(
@@ -175,7 +194,6 @@ def _slot_to_valuedfield(slot: FieldSlot, _coerce=None) -> ValuedField:
             conflicts=slot.conflicts,
         )
     except Exception as exc:
-        # Schema rejected — downgrade to FLAGGED
         return ValuedField(
             value=None,
             status=FieldStatus.FLAGGED,
