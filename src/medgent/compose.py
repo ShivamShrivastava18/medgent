@@ -154,9 +154,32 @@ def _coerce_value(field: str, raw: Any) -> Any:
                     out.append(Medication(name_as_written=item))
         return out
     if field == "medication_changes":
-        if isinstance(raw, list):
-            return [MedicationChange.model_validate(x) if isinstance(x, dict) else x for x in raw]
-        return []
+        if not isinstance(raw, list):
+            return []
+        out: list[MedicationChange] = []
+        for x in raw:
+            if isinstance(x, MedicationChange):
+                out.append(x)
+                continue
+            if not isinstance(x, dict):
+                continue
+            # LLMs sometimes emit "medication"/"change" instead of canonical field names.
+            d = dict(x)
+            d.setdefault("medication_name", d.get("medication") or d.get("name") or d.get("drug") or "unknown")
+            d.setdefault("change_type", d.get("change") or d.get("type") or "unchanged")
+            d.setdefault("documented_reason", d.get("reason"))
+            try:
+                out.append(MedicationChange.model_validate(d))
+            except Exception:
+                # Best-effort minimal record so we don't lose the row entirely.
+                out.append(
+                    MedicationChange(
+                        medication_name=str(d.get("medication_name") or "unknown"),
+                        change_type="unchanged",
+                        documented_reason=str(d.get("documented_reason") or "")[:200] or None,
+                    )
+                )
+        return out
     if field == "drug_interactions":
         if isinstance(raw, list):
             return [DrugInteraction.model_validate(x) if isinstance(x, dict) else x for x in raw]
