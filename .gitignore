@@ -5,6 +5,8 @@ __pycache__/
 .pages/
 outputs/index/
 outputs/agent_states/
+outputs/demo/
+scripts/
 docs/
 *.egg-info/
 .pytest_cache/

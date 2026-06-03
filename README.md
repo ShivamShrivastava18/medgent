@@ -202,10 +202,9 @@ medgent run data/patients/patient_2/source.pdf
 #   outputs/traces/patient_2.{jsonl,md}
 ```
 
-### Demo UI (recommended for the video)
+### Demo UI
 A single-page browser UI lets you flip between patient draft / step trace /
-Part 2 metrics without leaving the page. Built for recording the video without
-window-switching — sidebar shortcuts jump directly to:
+Part 2 metrics without leaving the page. Sidebar shortcuts jump directly to:
 - the handwriting-floor downgrade on `patient_2`'s trace
 - the learned `Hospital course summary:` opener on `synth_03`'s draft
 - the medication-reconciliation flag moments
