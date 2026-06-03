@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>medgent · discharge summary agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+    }
+    .mono, .citation, code, pre {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    }
+    .tab-btn { color: #64748b; border-bottom: 2px solid transparent; }
+    .tab-btn.active { color: #0f172a; border-bottom-color: #0f172a; }
+    .status-badge {
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .step-card { transition: background-color .2s; }
+    .step-card.highlight {
+      animation: pulse 1.5s ease-out;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+      100% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+    }
+    .scrollable { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+    .scrollable::-webkit-scrollbar { width: 8px; }
+    .scrollable::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    pre.wrap { white-space: pre-wrap; word-break: break-word; }
+  </style>
+</head>
+<body class="bg-slate-50">
+  <header class="border-b border-slate-200 bg-white px-6 py-3 flex items-center justify-between">
+    <div>
+      <h1 class="text-xl font-bold text-slate-900">medgent</h1>
+      <p class="text-xs text-slate-500">agentic discharge-summary drafting · Dscribe take-home</p>
+    </div>
+    <a href="https://github.com/ShivamShrivastava18/medgent" target="_blank"
+       class="text-sm text-slate-600 hover:text-slate-900 underline">view on github →</a>
+  </header>
+
+  <div class="flex" style="height: calc(100vh - 65px)">
+    <!-- Sidebar -->
+    <aside class="w-72 border-r border-slate-200 bg-white p-4 overflow-y-auto scrollable shrink-0">
+      <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Patients</h2>
+      <div id="patient-list" class="space-y-1 mb-6"></div>
+
+      <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Demo shortcuts</h2>
+      <div class="space-y-2 text-sm">
+        <button id="jump-handwriting"
+                class="w-full text-left p-3 rounded border border-amber-300 bg-amber-50 hover:bg-amber-100">
+          <div class="font-semibold text-amber-900">⚠ Handwriting downgrade</div>
+          <div class="text-xs text-amber-700 mt-0.5">patient_2 · trace · FILLED → FLAGGED</div>
+        </button>
+        <button id="jump-learning"
+                class="w-full text-left p-3 rounded border border-emerald-300 bg-emerald-50 hover:bg-emerald-100">
+          <div class="font-semibold text-emerald-900">✓ Learned prefix</div>
+          <div class="text-xs text-emerald-700 mt-0.5">synth_03 · draft · hospital course</div>
+        </button>
+        <button id="jump-recon"
+                class="w-full text-left p-3 rounded border border-purple-300 bg-purple-50 hover:bg-purple-100">
+          <div class="font-semibold text-purple-900">⚕ Medication reconciliation</div>
+          <div class="text-xs text-purple-700 mt-0.5">patient_2 · trace · undocumented changes</div>
+        </button>
+        <button id="jump-part2"
+                class="w-full text-left p-3 rounded border border-blue-300 bg-blue-50 hover:bg-blue-100">
+          <div class="font-semibold text-blue-900">📈 Part 2 curve</div>
+          <div class="text-xs text-blue-700 mt-0.5">10× edit-distance drop iter 0 → 1</div>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 overflow-y-auto scrollable" id="main-scroll">
+      <div id="patient-header" class="px-6 py-4 border-b border-slate-200 bg-white"></div>
+      <nav class="px-6 border-b border-slate-200 bg-white flex gap-1">
+        <button class="tab-btn px-4 py-3 text-sm font-medium" data-tab="overview">Overview</button>
+        <button class="tab-btn px-4 py-3 text-sm font-medium" data-tab="draft">Draft</button>
+        <button class="tab-btn px-4 py-3 text-sm font-medium" data-tab="trace">Trace</button>
+        <button class="tab-btn px-4 py-3 text-sm font-medium" data-tab="part2">Part 2</button>
+      </nav>
+      <div id="tab-content" class="p-6"></div>
+    </main>
+  </div>
+
+  <script>
+const API = '/api';
+let patients = [];
+let currentPatient = null;
+let currentTab = 'overview';
+
+const FIELD_LABELS = [
+  ['patient', 'Patient demographics'],
+  ['admission_date', 'Admission date'],
+  ['discharge_date', 'Discharge date'],
+  ['principal_diagnosis', 'Principal diagnosis'],
+  ['secondary_diagnoses', 'Secondary diagnoses'],
+  ['hospital_course', 'Hospital course'],
+  ['procedures', 'Procedures'],
+  ['admission_medications', 'Admission medications'],
+  ['discharge_medications', 'Discharge medications'],
+  ['medication_changes', 'Medication changes'],
+  ['drug_interactions', 'Drug interactions'],
+  ['allergies', 'Allergies'],
+  ['follow_up', 'Follow-up'],
+  ['pending_results', 'Pending results'],
+  ['discharge_condition', 'Discharge condition'],
+];
+
+const STATUS_COLORS = {
+  filled: 'bg-emerald-100 text-emerald-800',
+  flagged: 'bg-amber-100 text-amber-800',
+  missing: 'bg-slate-100 text-slate-700',
+  pending: 'bg-blue-100 text-blue-800',
+  conflicting: 'bg-red-100 text-red-800',
+};
+
+const PHASE_COLORS = {
+  plan: 'bg-blue-100 text-blue-800',
+  act: 'bg-purple-100 text-purple-800',
+  observe: 'bg-emerald-100 text-emerald-800',
+  reflect: 'bg-amber-100 text-amber-800',
+};
+
+const ARCH_DIAGRAM = `Stage 0 — PDF Index (deterministic envelope, Gemini Flash per page)
+   pdftoppm -r 150 → PNG per page
+   Gemini Flash per page → PageExtract {doc_type, dates, tables, free_text,
+                                        meds, labs, dx, handwriting_confidence}
+   Encounter clustering (largest cluster = current admission)
+
+Stage 1 — Field-Filler Agent Loop (real planning + re-planning; NOT a pipeline)
+   State: TodoList of required fields, accumulated evidence, open questions, flags
+   Tools: search_index · fetch_page · get_medications · get_lab_values · get_dates
+          compare_facts · drug_interaction_check · reconcile_medications
+   Actions: call_tool · mark_field · flag_field · stop
+   Hard caps: 60 iterations · 8 tool calls / field · 200 total tool calls
+
+Stage 2 — Compose
+   Atomic fields transfer from state. Narrative fields (hospital_course, follow_up)
+   get one Pro call given ONLY the cited excerpts, with per-sentence citation map.
+
+Stage 3 — Independent Verifier (THE safety floor)
+   Fresh Flash call. Sees ONLY proposed text + cited excerpts, NEVER the PDF.
+   Strips any sentence not supported by ≥1 cited excerpt → SafetyFlag.
+
+Stage 4 — Med-Recon + Drug-Interactions
+   Med-Recon: brand→generic normalization (Indian brands), comparator with
+              documented-reason search; flags unexplained add/stop/change.
+   Drug-Interaction: mock external service with 10% transient failure rate
+              to exercise robust failure handling.`;
+
+
+// ----------------------------- bootstrap ------------------------------------
+
+async function bootstrap() {
+  patients = await fetchJSON(`${API}/patients`);
+  renderPatientList();
+  if (patients.length) {
+    await selectPatient(patients[0].name);
+  } else {
+    document.getElementById('tab-content').innerHTML =
+      '<div class="text-slate-500">No drafts in <code>outputs/drafts/</code>. Run <code>medgent run …</code> first.</div>';
+  }
+}
+
+
+async function fetchJSON(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`fetch ${url} → ${r.status}`);
+  return r.json();
+}
+
+
+// ----------------------------- patient list ---------------------------------
+
+function renderPatientList() {
+  const html = patients.map(p => {
+    const active = p.name === currentPatient;
+    const tag = p.is_real
+      ? '<span class="text-xs font-semibold text-slate-500">REAL</span>'
+      : '<span class="text-xs font-semibold text-slate-400">SYNTH</span>';
+    return `
+      <button onclick="selectPatient('${p.name}')"
+              class="w-full text-left p-3 rounded border ${active ? 'border-slate-900 bg-slate-100' : 'border-transparent hover:bg-slate-50'}">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-slate-900">${p.name}</span>
+          ${tag}
+        </div>
+        <div class="text-xs text-slate-500 mt-0.5">
+          ${p.iterations}i · ${p.tool_calls}tc · ${p.safety_flags} flags
+        </div>
+      </button>
+    `;
+  }).join('');
+  document.getElementById('patient-list').innerHTML = html;
+}
+
+
+async function selectPatient(name) {
+  currentPatient = name;
+  renderPatientList();
+  const p = patients.find(x => x.name === name);
+  document.getElementById('patient-header').innerHTML = `
+    <div class="flex items-center justify-between gap-4">
+      <div>
+        <h2 class="text-lg font-bold text-slate-900">${name}</h2>
+        <p class="text-sm text-slate-600 mono">${p?.source_pdf || ''}</p>
+      </div>
+      <div class="flex items-center gap-2 text-sm">
+        <span class="px-3 py-1 rounded bg-slate-100 text-slate-700">${p?.iterations || 0} iterations</span>
+        <span class="px-3 py-1 rounded bg-slate-100 text-slate-700">${p?.tool_calls || 0} tool calls</span>
+        <span class="px-3 py-1 rounded bg-red-100 text-red-800 font-medium">${p?.safety_flags || 0} safety flags</span>
+      </div>
+    </div>
+  `;
+  await renderTab(currentTab);
+}
+
+
+// ----------------------------- tabs ----------------------------------------
+
+async function renderTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tab);
+  });
+  const c = document.getElementById('tab-content');
+  c.innerHTML = '<div class="text-slate-400 text-sm">loading…</div>';
+  try {
+    if (tab === 'overview') await renderOverview();
+    else if (tab === 'draft') await renderDraft();
+    else if (tab === 'trace') await renderTrace();
+    else if (tab === 'part2') await renderPart2();
+  } catch (e) {
+    c.innerHTML = `<div class="text-red-600 text-sm">Error: ${escapeHTML(e.message)}</div>`;
+  }
+  document.getElementById('main-scroll').scrollTop = 0;
+}
+
+
+// ----------------------------- Overview tab --------------------------------
+
+async function renderOverview() {
+  const draft = await fetchJSON(`${API}/patient/${currentPatient}/draft`);
+  let manifestBlock = '';
+  if (!patients.find(p => p.name === currentPatient)?.is_real) {
+    const m = await fetchJSON(`${API}/patient/${currentPatient}/manifest`);
+    if (m.injected_messiness?.length) {
+      manifestBlock = `
+        <h3 class="text-sm font-semibold mt-8 mb-3 text-slate-900">Planted messiness (ground truth)</h3>
+        <p class="text-xs text-slate-500 mb-3">
+          These were deliberately injected during synthetic-patient generation.
+          A good agent flags them rather than silently resolving.
+        </p>
+        <div class="space-y-2">
+          ${m.injected_messiness.map(item => `
+            <div class="rounded border-l-4 border-purple-400 bg-purple-50 p-3 text-sm text-purple-900">${escapeHTML(item)}</div>
+          `).join('')}
+        </div>
+      `;
+    }
+  }
+
+  const counts = { filled: 0, flagged: 0, missing: 0, pending: 0, conflicting: 0 };
+  for (const [k, _] of FIELD_LABELS) {
+    const f = draft[k];
+    if (f && counts[f.status] !== undefined) counts[f.status]++;
+  }
+
+  document.getElementById('tab-content').innerHTML = `
+    <div class="max-w-4xl space-y-6">
+      <div>
+        <h3 class="text-sm font-semibold mb-3 text-slate-900">Field status</h3>
+        <div class="grid grid-cols-5 gap-2">
+          ${statCard(counts.filled, 'FILLED', 'emerald')}
+          ${statCard(counts.flagged, 'FLAGGED', 'amber')}
+          ${statCard(counts.conflicting, 'CONFLICTING', 'red')}
+          ${statCard(counts.pending, 'PENDING', 'blue')}
+          ${statCard(counts.missing, 'MISSING', 'slate')}
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold mb-3 text-slate-900">Architecture</h3>
+        <pre class="bg-slate-100 p-4 rounded-lg text-xs overflow-x-auto scrollable">${escapeHTML(ARCH_DIAGRAM)}</pre>
+      </div>
+
+      ${manifestBlock}
+    </div>
+  `;
+}
+
+function statCard(value, label, color) {
+  const cls = {
+    emerald: 'bg-emerald-50 border-emerald-200 text-emerald-900',
+    amber:   'bg-amber-50 border-amber-200 text-amber-900',
+    red:     'bg-red-50 border-red-200 text-red-900',
+    blue:    'bg-blue-50 border-blue-200 text-blue-900',
+    slate:   'bg-slate-50 border-slate-200 text-slate-800',
+  }[color];
+  return `
+    <div class="rounded-lg border ${cls} p-4">
+      <div class="text-2xl font-bold">${value}</div>
+      <div class="text-xs mt-1 font-semibold tracking-wider">${label}</div>
+    </div>
+  `;
+}
+
+
+// ----------------------------- Draft tab -----------------------------------
+
+async function renderDraft() {
+  const draft = await fetchJSON(`${API}/patient/${currentPatient}/draft`);
+  const sections = FIELD_LABELS.map(([k, l]) => renderField(draft[k], l, k)).join('');
+  const flags = (draft.safety_flags || []).map(f => `
+    <div class="border-l-4 ${severityBorder(f.severity)} pl-3 py-2 bg-white rounded">
+      <div class="flex items-center justify-between">
+        <div class="text-sm font-medium text-slate-900 mono">${escapeHTML(f.field)}</div>
+        <span class="text-xs font-semibold uppercase ${severityText(f.severity)}">${f.severity}</span>
+      </div>
+      <div class="text-xs text-slate-700 mt-1">${escapeHTML(f.reason)}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('tab-content').innerHTML = `
+    <div class="max-w-4xl">
+      <div class="space-y-3">${sections}</div>
+      ${flags ? `
+        <div class="mt-8">
+          <h3 class="text-sm font-semibold mb-3 text-slate-900">Safety flags raised</h3>
+          <div class="space-y-2">${flags}</div>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function renderField(field, label, key) {
+  if (!field) return '';
+  const status = field.status || 'missing';
+  const sc = STATUS_COLORS[status] || STATUS_COLORS.missing;
+  let body = '';
+  if (status === 'filled' && field.value !== null && field.value !== undefined) {
+    body = `<div class="text-slate-900 mt-2">${formatValue(field.value, key)}</div>`;
+    if (field.citations && field.citations.length) {
+      body += `<div class="mt-3 text-xs text-slate-500">Sources: ${field.citations.map(c =>
+        `<span class="citation inline-block px-2 py-0.5 bg-slate-100 rounded mr-1 ${c.is_handwritten ? 'text-amber-700' : 'text-slate-700'}" title="${escapeHTML(c.excerpt || '')}">p.${c.page_no}${c.is_handwritten ? ' (hw '+c.transcription_confidence.toFixed(2)+')' : ''}</span>`
+      ).join('')}</div>`;
+    }
+  } else {
+    body = field.flag_reason
+      ? `<div class="mt-2 text-sm text-amber-800 italic">${escapeHTML(field.flag_reason)}</div>`
+      : '<div class="mt-2 text-sm text-slate-400 italic">No value</div>';
+    if (field.conflicts && field.conflicts.length) {
+      body += `<div class="mt-2 text-xs text-slate-600">Conflicting values:</div><ul class="text-sm list-disc list-inside text-slate-700">${field.conflicts.map(c =>
+        `<li>${escapeHTML(String(c))}</li>`
+      ).join('')}</ul>`;
+    }
+  }
+  return `
+    <div data-field="${key}" class="rounded-lg border border-slate-200 bg-white p-4">
+      <div class="flex items-center justify-between">
+        <h4 class="font-medium text-slate-900">${label}</h4>
+        <span class="status-badge ${sc}">${status}</span>
+      </div>
+      ${body}
+    </div>
+  `;
+}
+
+function formatValue(value, key) {
+  if (typeof value === 'string') return `<div class="${key === 'hospital_course' ? 'whitespace-pre-line' : ''}">${escapeHTML(value)}</div>`;
+  if (Array.isArray(value)) {
+    if (value.length === 0) return '<div class="text-sm text-slate-400 italic">(empty list)</div>';
+    return '<ul class="space-y-1 text-sm">' + value.map(v =>
+      `<li class="text-slate-800">• ${typeof v === 'object' && v !== null ? formatObject(v) : escapeHTML(String(v))}</li>`
+    ).join('') + '</ul>';
+  }
+  if (typeof value === 'object' && value !== null) return formatObject(value);
+  return escapeHTML(String(value));
+}
+
+function formatObject(obj) {
+  return Object.entries(obj)
+    .filter(([k, v]) => v !== null && v !== undefined && v !== '')
+    .map(([k, v]) => {
+      const val = typeof v === 'object' ? JSON.stringify(v) : String(v);
+      return `<span class="mono text-xs"><span class="text-slate-500">${escapeHTML(k)}:</span> <span class="text-slate-800">${escapeHTML(val)}</span></span>`;
+    })
+    .join(' · ');
+}
+
+function severityBorder(sev) {
+  return { low: 'border-blue-400', medium: 'border-amber-400', high: 'border-red-500' }[sev] || 'border-slate-400';
+}
+function severityText(sev) {
+  return { low: 'text-blue-700', medium: 'text-amber-700', high: 'text-red-700' }[sev] || 'text-slate-500';
+}
+
+
+// ----------------------------- Trace tab -----------------------------------
+
+async function renderTrace() {
+  const steps = await fetchJSON(`${API}/patient/${currentPatient}/trace`);
+  const html = steps.map(renderStep).join('');
+  document.getElementById('tab-content').innerHTML = `
+    <div class="max-w-4xl">
+      <div class="mb-4 flex items-center justify-between sticky top-0 bg-slate-50 py-2">
+        <h3 class="text-sm font-semibold text-slate-900">${steps.length} steps</h3>
+        <div class="flex gap-2">
+          <button onclick="jumpStep('safety')" class="text-xs px-3 py-1 rounded border border-red-300 bg-red-50 hover:bg-red-100 text-red-800">
+            next safety moment ↓
+          </button>
+          <button onclick="jumpStep('flag')" class="text-xs px-3 py-1 rounded border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-800">
+            next flag ↓
+          </button>
+        </div>
+      </div>
+      <div class="space-y-3">${html}</div>
+    </div>
+  `;
+}
+
+function renderStep(step) {
+  const phaseColor = PHASE_COLORS[step.phase] || 'bg-slate-100 text-slate-700';
+  let borderClass = 'border-slate-200';
+  let bgClass = 'bg-white';
+  let tag = '';
+  let attr = '';
+
+  const r = step.result_summary || '';
+  if (/DOWNGRADED|downgrad/i.test(r)) {
+    borderClass = 'border-red-400 border-2';
+    bgClass = 'bg-red-50';
+    tag = '<span class="ml-2 px-2 py-0.5 rounded text-xs bg-red-200 text-red-900 font-bold">⚠ SAFETY GUARDRAIL CAUGHT</span>';
+    attr = ' data-safety="true"';
+  } else if (/flagged|FLAGGED/i.test(r) || step.action === 'flag_field') {
+    borderClass = 'border-amber-300';
+    bgClass = 'bg-amber-50';
+    tag = '<span class="ml-2 px-2 py-0.5 rounded text-xs bg-amber-200 text-amber-900 font-semibold">FLAG</span>';
+    attr = ' data-flag="true"';
+  } else if (step.action === 'mark_field' && /status=filled|committed/i.test(r)) {
+    borderClass = 'border-emerald-200';
+  }
+
+  const inputs = step.inputs && Object.keys(step.inputs).length
+    ? `<details class="text-xs mt-2"><summary class="text-slate-500 cursor-pointer">inputs</summary><pre class="wrap mt-2 p-3 bg-slate-50 rounded text-xs overflow-x-auto scrollable">${escapeHTML(JSON.stringify(step.inputs, null, 2))}</pre></details>`
+    : '';
+
+  return `
+    <div id="step-${step.step_no}" class="step-card rounded-lg ${borderClass} ${bgClass} p-4"${attr}>
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-semibold text-slate-500">step ${step.step_no}</span>
+        <span class="text-xs px-2 py-0.5 rounded ${phaseColor}">${step.phase}</span>
+        ${step.field_in_focus ? `<span class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700 mono">${escapeHTML(step.field_in_focus)}</span>` : ''}
+        ${step.action ? `<span class="text-xs px-2 py-0.5 rounded bg-violet-50 text-violet-800 mono">${escapeHTML(step.action)}</span>` : ''}
+        ${tag}
+      </div>
+      <p class="text-sm text-slate-800 leading-relaxed mb-2">${escapeHTML(step.reasoning || '')}</p>
+      ${inputs}
+      ${step.result_summary ? `<div class="text-xs text-slate-700 mt-2"><span class="text-slate-400">→</span> <span class="mono">${escapeHTML(step.result_summary)}</span></div>` : ''}
+      ${step.next_decision ? `<div class="text-xs text-slate-500 mt-1 italic">next: ${escapeHTML(step.next_decision)}</div>` : ''}
+    </div>
+  `;
+}
+
+function jumpStep(kind) {
+  const selector = kind === 'safety' ? '[data-safety="true"]' : '[data-flag="true"], [data-safety="true"]';
+  const cards = Array.from(document.querySelectorAll(selector));
+  if (!cards.length) return;
+  const scroller = document.getElementById('main-scroll');
+  const cur = scroller.scrollTop;
+  let target = cards[0];
+  for (const c of cards) {
+    if (c.offsetTop > cur + 80) { target = c; break; }
+  }
+  scroller.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
+  target.classList.add('highlight');
+  setTimeout(() => target.classList.remove('highlight'), 1600);
+}
+
+
+// ----------------------------- Part 2 tab ----------------------------------
+
+async function renderPart2() {
+  const data = await fetchJSON(`${API}/part2`);
+  const rows = (data.metrics || []).map(m => `
+    <tr class="border-b border-slate-100">
+      <td class="px-4 py-2 text-sm font-semibold mono">${m.iteration}</td>
+      <td class="px-4 py-2 text-sm mono">${m.holdout_edit_distance_norm.toFixed(5)}</td>
+      <td class="px-4 py-2 text-sm mono">${(m.per_section?.['sec.hospital_course'] || 0).toFixed(5)}</td>
+      <td class="px-4 py-2 text-sm mono">${m.holdout_safety_preservation.toFixed(2)}</td>
+      <td class="px-4 py-2 text-sm mono">${m.holdout_field_retention.toFixed(2)}</td>
+      <td class="px-4 py-2 text-sm mono">${m.rules_total}</td>
+    </tr>
+  `).join('');
+
+  const rules = (data.rules || []).map(r => `
+    <div class="rounded-lg border border-slate-200 bg-white p-4">
+      <div class="flex items-center gap-2 mb-2 flex-wrap">
+        <span class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-800 mono">${escapeHTML(r.section)}</span>
+        <span class="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-800 mono">${escapeHTML(r.pattern_kind)}</span>
+        <span class="text-xs text-slate-500">freq = ${r.frequency}</span>
+      </div>
+      <p class="text-sm text-slate-800 mb-3">${escapeHTML(r.hint)}</p>
+      <details class="text-xs">
+        <summary class="text-slate-500 cursor-pointer">example (draft → edited)</summary>
+        <div class="mt-2 grid grid-cols-2 gap-2">
+          <div>
+            <div class="text-xs text-slate-500 mb-1">draft</div>
+            <pre class="wrap p-2 bg-slate-50 rounded text-xs overflow-x-auto scrollable">${escapeHTML(r.example_before || '')}</pre>
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 mb-1">edited</div>
+            <pre class="wrap p-2 bg-emerald-50 rounded text-xs overflow-x-auto scrollable">${escapeHTML(r.example_after || '')}</pre>
+          </div>
+        </div>
+      </details>
+    </div>
+  `).join('');
+
+  document.getElementById('tab-content').innerHTML = `
+    <div class="max-w-5xl space-y-6">
+      <div>
+        <h3 class="text-sm font-semibold mb-3 text-slate-900">Holdout learning curve</h3>
+        <img src="${API}/learning-curve.png" alt="learning curve" class="rounded-lg border border-slate-200 bg-white max-w-full">
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold mb-3 text-slate-900">Per-iteration metrics</h3>
+        <div class="rounded-lg border border-slate-200 bg-white overflow-hidden">
+          <table class="w-full">
+            <thead class="bg-slate-50 border-b border-slate-200">
+              <tr>
+                <th class="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">iter</th>
+                <th class="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">edit_dist (overall)</th>
+                <th class="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">edit_dist (hospital_course)</th>
+                <th class="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">safety_pres</th>
+                <th class="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">field_retention</th>
+                <th class="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase">rules</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        <p class="text-xs text-slate-500 mt-2">
+          Edit-distance-norm drops ~10× from iter 0 → 1; safety_preservation stays at 1.0
+          (guardrail prevents learning from touching safety flags).
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold mb-3 text-slate-900">Learned rules (correction memory)</h3>
+        <div class="space-y-3">${rules}</div>
+      </div>
+    </div>
+  `;
+}
+
+
+// ----------------------------- helpers + bindings ---------------------------
+
+function escapeHTML(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+document.querySelectorAll('.tab-btn').forEach(b => {
+  b.addEventListener('click', () => renderTab(b.dataset.tab));
+});
+
+document.getElementById('jump-handwriting').onclick = async () => {
+  await selectPatient('patient_2');
+  await renderTab('trace');
+  setTimeout(() => jumpStep('safety'), 200);
+};
+document.getElementById('jump-learning').onclick = async () => {
+  await selectPatient('synth_03');
+  await renderTab('draft');
+  setTimeout(() => {
+    const el = document.querySelector('[data-field="hospital_course"]');
+    if (el) {
+      document.getElementById('main-scroll').scrollTo({ top: el.offsetTop - 100, behavior: 'smooth' });
+      el.classList.add('highlight');
+      setTimeout(() => el.classList.remove('highlight'), 1600);
+    }
+  }, 200);
+};
+document.getElementById('jump-recon').onclick = async () => {
+  await selectPatient('patient_2');
+  await renderTab('trace');
+  setTimeout(() => {
+    // Scroll to first flag moment (med-recon area)
+    jumpStep('flag');
+  }, 200);
+};
+document.getElementById('jump-part2').onclick = async () => {
+  await renderTab('part2');
+};
+
+bootstrap();
+  </script>
+</body>
+</html>

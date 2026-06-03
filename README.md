@@ -187,6 +187,19 @@ medgent run data/patients/patient_2/source.pdf
 #   outputs/traces/patient_2.{jsonl,md}
 ```
 
+### Demo UI (recommended for the video)
+A single-page browser UI lets you flip between patient draft / step trace /
+Part 2 metrics without leaving the page. Built for recording the video without
+window-switching — sidebar shortcuts jump directly to:
+- the handwriting-floor downgrade on `patient_2`'s trace
+- the learned `Hospital course summary:` opener on `synth_03`'s draft
+- the medication-reconciliation flag moments
+- the Part 2 learning curve
+
+```bash
+python frontend/server.py     # → http://127.0.0.1:8000
+```
+
 ### Just (re)index a PDF
 ```bash
 medgent index data/patients/patient_2/source.pdf --force
