@@ -124,7 +124,10 @@ def _coerce_value(field: str, raw: Any) -> Any:
         return None
     if field == "demographics":
         if isinstance(raw, dict):
-            return Demographics(**{k: raw.get(k) for k in ("name", "age", "sex", "mrn")})
+            # Demographics fields are Optional[str]; coerce numeric ages/MRNs to str.
+            return Demographics(
+                **{k: (str(raw.get(k)) if raw.get(k) is not None else None) for k in ("name", "age", "sex", "mrn")}
+            )
         return None
     if field in ("secondary_diagnoses", "procedures", "allergies", "follow_up", "pending_results"):
         if isinstance(raw, list):
