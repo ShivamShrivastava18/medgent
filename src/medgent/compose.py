@@ -81,14 +81,18 @@ def _compose_narrative(field_name: str, evidence: list[Citation], memory_hint: s
         f"Evidence excerpts (cite by index):\n{bullets}\n\n"
         "Return JSON {sentences: [{text, citation_indices: [int]}, ...]}."
     )
-    out = call_structured(
-        prompt,
-        schema=NarrativeOutput,
-        system=_NARRATIVE_SYSTEM,
-        model=config.MODEL_PRO,
-        temperature=0.1,
-        max_output_tokens=1024,
-    )
+    try:
+        out = call_structured(
+            prompt,
+            schema=NarrativeOutput,
+            system=_NARRATIVE_SYSTEM,
+            model=config.MODEL_PRO,
+            temperature=0.1,
+            max_output_tokens=2048,
+        )
+    except Exception as exc:
+        log.warning("compose narrative for %s failed (%s) — falling back to empty", field_name, str(exc)[:140])
+        return NarrativeOutput(sentences=[])
     return out if isinstance(out, NarrativeOutput) else NarrativeOutput.model_validate(out.model_dump())
 
 
