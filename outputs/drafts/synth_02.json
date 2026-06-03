@@ -1,0 +1,341 @@
+{
+  "patient": {
+    "value": {
+      "name": null,
+      "age": null,
+      "sex": null,
+      "mrn": null
+    },
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 3,
+        "doc_type": "progress_note",
+        "excerpt": "PROGRESS NOTE ? Day 2 - Patient synth_02 - Acute heart failure exacerbation",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "admission_date": {
+    "value": "2023-08-12",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Admission Date: 2023-08-12",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "discharge_date": {
+    "value": "2023-08-13",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "DISCHARGE ADVICE - Patient synth_02 - Acute heart failure exacerbation\nPATIENT: synth_02\nADMISSION DATE: 2023-08-12\nDISCHARGE DATE: 2023-08-13",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "principal_diagnosis": {
+    "value": "Acute heart failure exacerbation",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 2,
+        "doc_type": "progress_note",
+        "excerpt": "PROGRESS NOTE ? Day 1 - Patient synth_02 - Acute heart failure exacerbation\nPAT",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "secondary_diagnoses": {
+    "value": null,
+    "status": "missing",
+    "citations": [],
+    "flag_reason": "Searches for 'secondary diagnosis' and 'comorbidities' returned no results.",
+    "conflicts": null
+  },
+  "hospital_course": {
+    "value": "Hospital course summary: The patient was admitted for an acute heart failure exacerbation. The patient reported feeling much better and less short of breath. On examination, there were crackles at the lung bases and 1+ pedal edema, both of which had improved since admission.",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 2,
+        "doc_type": "progress_note",
+        "excerpt": "PROGRESS NOTE ? Day 1 - Patient synth_02 - Acute heart failure exacerbation... Patient reports feeling much better today. Less short of breath... Lungs: Crackles at bases bilaterally, improved from admission... Extremities: 1+ pedal edema, improved from 2+ on admission... ASSESSMENT/PLAN: Acute hear",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "procedures": {
+    "value": null,
+    "status": "missing",
+    "citations": [],
+    "flag_reason": "Search for 'procedure' returned no results.",
+    "conflicts": null
+  },
+  "admission_medications": {
+    "value": [
+      {
+        "name_as_written": "Lisinopril",
+        "normalized_name": null,
+        "dose": "20 mg",
+        "route": "by mouth",
+        "frequency": "daily",
+        "duration": null
+      },
+      {
+        "name_as_written": "Metoprolol Succinate",
+        "normalized_name": null,
+        "dose": "100 mg",
+        "route": "by mouth",
+        "frequency": "daily",
+        "duration": null
+      },
+      {
+        "name_as_written": "Furosemide",
+        "normalized_name": null,
+        "dose": "40 mg",
+        "route": "by mouth",
+        "frequency": "twice a day",
+        "duration": null
+      },
+      {
+        "name_as_written": "Spironolactone",
+        "normalized_name": null,
+        "dose": "25 mg",
+        "route": "by mouth",
+        "frequency": "daily",
+        "duration": null
+      },
+      {
+        "name_as_written": "Atorvastatin",
+        "normalized_name": null,
+        "dose": "40 mg",
+        "route": "by mouth",
+        "frequency": "daily",
+        "duration": null
+      },
+      {
+        "name_as_written": "Aspirin",
+        "normalized_name": null,
+        "dose": "81 mg",
+        "route": "by mouth",
+        "frequency": "daily",
+        "duration": null
+      }
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 5,
+        "doc_type": "discharge_summary",
+        "excerpt": "Lisinopril 20 mg by mouth daily",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 5,
+        "doc_type": "discharge_summary",
+        "excerpt": "Metoprolol Succinate 100 mg by mouth daily",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 5,
+        "doc_type": "discharge_summary",
+        "excerpt": "Furosemide 40 mg by mouth twice a day",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 5,
+        "doc_type": "discharge_summary",
+        "excerpt": "Spironolactone 25 mg by mouth daily",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 5,
+        "doc_type": "discharge_summary",
+        "excerpt": "Atorvastatin 40 mg by mouth daily",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 5,
+        "doc_type": "discharge_summary",
+        "excerpt": "Aspirin 81 mg by mouth daily",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "discharge_medications": {
+    "value": [
+      {
+        "name_as_written": "Furosemide",
+        "normalized_name": null,
+        "dose": "40 mg",
+        "route": "by mouth",
+        "frequency": "daily",
+        "duration": null
+      },
+      {
+        "name_as_written": "Lisinopril",
+        "normalized_name": null,
+        "dose": "20 mg",
+        "route": "by mouth",
+        "frequency": "daily",
+        "duration": null
+      },
+      {
+        "name_as_written": "Metoprolol Succinate",
+        "normalized_name": null,
+        "dose": "100 mg",
+        "route": "by mouth",
+        "frequency": "daily",
+        "duration": null
+      },
+      {
+        "name_as_written": "Spironolactone",
+        "normalized_name": null,
+        "dose": "25 mg",
+        "route": "by mouth",
+        "frequency": "daily",
+        "duration": null
+      },
+      {
+        "name_as_written": "Potassium Chloride",
+        "normalized_name": null,
+        "dose": "20 mEq",
+        "route": "by mouth",
+        "frequency": "daily",
+        "duration": null
+      }
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 5,
+        "doc_type": "discharge_summary",
+        "excerpt": "Discharge Medications:\nLisinopril 20 mg by mouth daily\nMetoprolol Succinate 100 mg by mouth daily\nFurosemide 40 mg by mouth daily\nSpironolactone 25 mg by mouth daily\nPotassium Chloride 20 mEq by mouth daily",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "medication_changes": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "allergies": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "follow_up": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "pending_results": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "discharge_condition": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "drug_interactions": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "safety_flags": [
+    {
+      "field": "medication_changes",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    },
+    {
+      "field": "allergies",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    },
+    {
+      "field": "follow_up",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    },
+    {
+      "field": "pending_results",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    },
+    {
+      "field": "discharge_condition",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    },
+    {
+      "field": "drug_interactions",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    }
+  ],
+  "generated_at": "2026-06-03T05:44:08.935904Z",
+  "source_pdf": "data/synthetic/synth_02/source.pdf",
+  "iterations_used": 25,
+  "tool_calls_used": 16
+}

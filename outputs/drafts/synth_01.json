@@ -1,0 +1,291 @@
+{
+  "patient": {
+    "value": {
+      "name": "Smith, Jo",
+      "age": null,
+      "sex": null,
+      "mrn": null
+    },
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "PATIENT: Smith, Jo",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "admission_date": {
+    "value": "2023-10-23",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "admission-context date 2023-10-23 on admission_note",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "discharge_date": {
+    "value": "2023-10-24",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 2,
+        "doc_type": "progress_note",
+        "excerpt": "discharge-context date 2023-10-24 on progress_note",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "principal_diagnosis": {
+    "value": "Acute COPD exacerbation",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "ADMISSION NOTE - Patient synth_01 - Acute COPD exacerbation",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "secondary_diagnoses": {
+    "value": [
+      "{'diagnosis': 'Hypertension', 'type': 'chronic'}",
+      "{'diagnosis': 'Type 2 Diabetes Mellitus', 'type': 'chronic'}",
+      "{'diagnosis': 'Hyperlipidemia', 'type': 'chronic'}",
+      "{'diagnosis': 'Coronary Artery Disease', 'type': 'chronic'}",
+      "{'diagnosis': 'Chronic Obstructive Pulmonary Disease (COPD), Gold stage 3', 'type': 'chronic'}"
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "PAST MEDICAL HISTORY:\n- Chronic Obstructive Pulmonary Disease (COPD), Gold stage 3\n- Hypertension\n- Type 2 Diabetes Mellitus\n- Hyperlipidemia\n- Coronary Artery Disease, s/p PCI in 2020",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "hospital_course": {
+    "value": "Hospital course summary: The patient was admitted for an acute COPD exacerbation characterized by worsening dyspnea and hypoxia. Treatment was initiated with IV methylprednisolone, continuous nebulizers, and supplemental oxygen. The patient's dyspnea improved, and their oxygen requirement decreased. They were successfully weaned to room air and transitioned from IV steroids to oral prednisone. The patient was clinically much improved and stable for discharge.",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Patient presented with a 3-day history of worsening dyspnea, cough, and increased sputum production... O2 sat 88% on room air... Plan: Admit for acute COPD exacerbation. Start IV methylprednisolone, continuous nebulized albuterol/ipratropium, and supplemental O2.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 2,
+        "doc_type": "progress_note",
+        "excerpt": "Patient reports feeling much better today. Dyspnea has improved. O2 requirement is down to 2L NC. Will continue IV steroids and nebulizers. Monitor for further improvement.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 3,
+        "doc_type": "progress_note",
+        "excerpt": "Patient is clinically much improved. Now stable on room air. We will transition to oral prednisone today and decrease nebulizer frequency. Plan for discharge tomorrow if continues to do well.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "procedures": {
+    "value": null,
+    "status": "missing",
+    "citations": [],
+    "flag_reason": "agent did not commit a value",
+    "conflicts": null
+  },
+  "admission_medications": {
+    "value": [
+      {
+        "name_as_written": "Tiotropium (Spiriva) HandiHaler",
+        "normalized_name": null,
+        "dose": "18 mcg",
+        "route": "inhalation",
+        "frequency": "daily",
+        "duration": null
+      },
+      {
+        "name_as_written": "Albuterol MDI",
+        "normalized_name": null,
+        "dose": "2 puffs",
+        "route": "inhalation",
+        "frequency": "as needed for shortness of breath",
+        "duration": null
+      },
+      {
+        "name_as_written": "Lisinopril",
+        "normalized_name": null,
+        "dose": "10 mg",
+        "route": "PO",
+        "frequency": "daily",
+        "duration": null
+      },
+      {
+        "name_as_written": "Metformin",
+        "normalized_name": null,
+        "dose": "1000 mg",
+        "route": "PO",
+        "frequency": "twice daily",
+        "duration": null
+      },
+      {
+        "name_as_written": "Atorvastatin",
+        "normalized_name": null,
+        "dose": "40 mg",
+        "route": "PO",
+        "frequency": "daily",
+        "duration": null
+      }
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Home Medications:\n- Tiotropium (Spiriva) HandiHaler 18 mcg inhalation daily\n- Albuterol MDI 2 puffs inhalation as needed for shortness of breath\n- Lisinopril 10 mg PO daily\n- Metformin 1000 mg PO twice daily\n- Atorvastatin 40 mg PO daily",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 5,
+        "doc_type": "other",
+        "excerpt": "Tiotropium 18 mcg inhalation daily (Home Med)\nAlbuterol MDI 2 puffs inhalation PRN (Home Med)\nLisinopril 10 mg PO daily (Home Med)\nMetformin 1000 mg PO BID (Home Med)\nAtorvastatin 40 mg PO daily (Home Med)",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "discharge_medications": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "medication_changes": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "allergies": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "follow_up": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "pending_results": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "discharge_condition": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "drug_interactions": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "safety_flags": [
+    {
+      "field": "discharge_medications",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    },
+    {
+      "field": "medication_changes",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    },
+    {
+      "field": "allergies",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    },
+    {
+      "field": "follow_up",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    },
+    {
+      "field": "pending_results",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    },
+    {
+      "field": "discharge_condition",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    },
+    {
+      "field": "drug_interactions",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 25,
+      "citations": []
+    }
+  ],
+  "generated_at": "2026-06-03T05:43:07.189421Z",
+  "source_pdf": "data/synthetic/synth_01/source.pdf",
+  "iterations_used": 25,
+  "tool_calls_used": 17
+}

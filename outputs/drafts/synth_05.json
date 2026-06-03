@@ -1,0 +1,272 @@
+{
+  "patient": {
+    "value": null,
+    "status": "flagged",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "ADMISSION NOTE - Patient synth_05 - Post-operative recovery after open\ncholecystectomy.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": "Unable to find patient's age, date of birth, or MRN after multiple search attempts. Only the patient's name 'synth_05' was found.",
+    "conflicts": null
+  },
+  "admission_date": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "Unable to determine admission date after multiple search attempts and tool calls. The `get_dates` tool consistently returned no results, and manual searches of the admission note did not reveal a date.",
+    "conflicts": null
+  },
+  "discharge_date": {
+    "value": "2024-03-10",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "Discharged on\n2024-03-10.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "principal_diagnosis": {
+    "value": "Post-operative recovery after open cholecystectomy",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "ADMISSION NOTE - Patient synth_05 - Post-operative recovery after open\ncholecystectomy",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "secondary_diagnoses": {
+    "value": [
+      "Hypertension",
+      "Type 2 Diabetes Mellitus"
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 1,
+        "doc_type": "admission_note",
+        "excerpt": "Past Medical History: Hypertension, Type 2 Diabetes Mellitus.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "hospital_course": {
+    "value": "Hospital course summary: The patient was admitted for post-operative recovery after an open cholecystectomy. The patient's pain was initially managed with a PCA and then transitioned to oral analgesics. Their diet was advanced to a soft diet, and they progressed to ambulating independently. The hospital course was uneventful, and the patient was discharged on post-operative day 3.",
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 2,
+        "doc_type": "progress_note",
+        "excerpt": "PROGRESS NOTE ? Day 1 - Patient synth_05 - Post-operative recovery after open cholecystectomy. Patient is stable, vital signs are within normal limits. Pain is well-controlled with PCA. Diet advanced to clear liquids. Ambulating with assistance.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 3,
+        "doc_type": "progress_note",
+        "excerpt": "PROGRESS NOTE ? Day 2 - Patient synth_05 - Post-operative recovery after open cholecystectomy. Patient continues to do well. PCA discontinued, transitioned to oral analgesics. Tolerating soft diet. Ambulating independently. Plan for discharge tomorrow if continues to progress.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 6,
+        "doc_type": "discharge_summary",
+        "excerpt": "DISCHARGE ADVICE - Patient synth_05 - Post-operative recovery after open cholecystectomy. Hospital course was uneventful. Patient recovered well from surgery. Pain was managed effectively, and patient was able to ambulate and tolerate a diet prior to discharge. Discharged on post-operative day 3.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "procedures": {
+    "value": [
+      "{'procedure_name': 'Open cholecystectomy', 'date': 'FLAGGED'}"
+    ],
+    "status": "filled",
+    "citations": [
+      {
+        "page_no": 2,
+        "doc_type": "progress_note",
+        "excerpt": "PROGRESS NOTE ? Day 1 - Patient synth_05 - Post-operative recovery after open\ncholecystectomy.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      },
+      {
+        "page_no": 3,
+        "doc_type": "progress_note",
+        "excerpt": "PROGRESS NOTE ? Day 2 - Patient synth_05 - Post-operative recovery after open\ncholecystectomy.",
+        "is_handwritten": false,
+        "transcription_confidence": 1.0
+      }
+    ],
+    "flag_reason": null,
+    "conflicts": null
+  },
+  "admission_medications": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content; citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail",
+    "conflicts": null
+  },
+  "discharge_medications": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content; citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail",
+    "conflicts": null
+  },
+  "medication_changes": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "agent attempted FILLED but citations invalid (no citations); downgraded to FLAGGED by guardrail",
+    "conflicts": null
+  },
+  "allergies": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "Unable to find any documentation of patient's allergies after multiple search attempts.",
+    "conflicts": null
+  },
+  "follow_up": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail",
+    "conflicts": null
+  },
+  "pending_results": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "discharge_condition": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "drug_interactions": {
+    "value": null,
+    "status": "flagged",
+    "citations": [],
+    "flag_reason": "loop ended without commit — clinician must decide",
+    "conflicts": null
+  },
+  "safety_flags": [
+    {
+      "field": "admission_date",
+      "reason": "per-field tool-call cap (8) exceeded without sufficient evidence — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 12,
+      "citations": []
+    },
+    {
+      "field": "admission_date",
+      "reason": "Unable to determine admission date after multiple search attempts and tool calls. The `get_dates` tool consistently returned no results, and manual searches of the admission note did not reveal a date.",
+      "severity": "high",
+      "raised_at_step": 12,
+      "citations": []
+    },
+    {
+      "field": "demographics",
+      "reason": "Unable to find patient's age, date of birth, or MRN after multiple search attempts. Only the patient's name 'synth_05' was found.",
+      "severity": "medium",
+      "raised_at_step": 17,
+      "citations": [
+        {
+          "page_no": 1,
+          "doc_type": "admission_note",
+          "excerpt": "ADMISSION NOTE - Patient synth_05 - Post-operative recovery after open\ncholecystectomy.",
+          "is_handwritten": false,
+          "transcription_confidence": 1.0
+        }
+      ]
+    },
+    {
+      "field": "admission_medications",
+      "reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 1 content; citation excerpt does not overlap page 1 content); downgraded to FLAGGED by guardrail",
+      "severity": "medium",
+      "raised_at_step": 46,
+      "citations": []
+    },
+    {
+      "field": "discharge_medications",
+      "reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content; citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail",
+      "severity": "medium",
+      "raised_at_step": 50,
+      "citations": []
+    },
+    {
+      "field": "medication_changes",
+      "reason": "agent attempted FILLED but citations invalid (no citations); downgraded to FLAGGED by guardrail",
+      "severity": "medium",
+      "raised_at_step": 52,
+      "citations": []
+    },
+    {
+      "field": "allergies",
+      "reason": "Unable to find any documentation of patient's allergies after multiple search attempts.",
+      "severity": "medium",
+      "raised_at_step": 56,
+      "citations": []
+    },
+    {
+      "field": "follow_up",
+      "reason": "agent attempted FILLED but citations invalid (citation excerpt does not overlap page 4 content); downgraded to FLAGGED by guardrail",
+      "severity": "medium",
+      "raised_at_step": 58,
+      "citations": []
+    },
+    {
+      "field": "pending_results",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 60,
+      "citations": []
+    },
+    {
+      "field": "discharge_condition",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 60,
+      "citations": []
+    },
+    {
+      "field": "drug_interactions",
+      "reason": "loop ended without commit — clinician must decide",
+      "severity": "medium",
+      "raised_at_step": 60,
+      "citations": []
+    }
+  ],
+  "generated_at": "2026-06-03T05:44:54.193590Z",
+  "source_pdf": "data/synthetic/synth_05/source.pdf",
+  "iterations_used": 60,
+  "tool_calls_used": 48
+}
