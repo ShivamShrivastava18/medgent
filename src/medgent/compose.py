@@ -97,17 +97,23 @@ def _narrative_to_field(field_name: str, slot: FieldSlot, memory_hint: str = "")
         return _slot_to_valuedfield(slot, _coerce=str)
     narr = _compose_narrative(field_name, slot.citations, memory_hint=memory_hint)
     if not narr.sentences:
-        return ValuedField[str](
+        return ValuedField(
             status=FieldStatus.FLAGGED,
             value=None,
             flag_reason="compose found insufficient evidence to write narrative — clinician must draft",
             citations=slot.citations,
         )
-    # join sentences, preserve mapping for verifier downstream
-    joined = " ".join(s.text for s in narr.sentences)
-    # narrow citations to those actually referenced
     used = sorted({i for s in narr.sentences for i in s.citation_indices if 0 <= i < len(slot.citations)})
     used_cites = [slot.citations[i] for i in used] or slot.citations
+    # follow_up is rendered as a list; hospital_course stays a paragraph
+    if field_name == "follow_up":
+        items = [s.text.strip(" .") for s in narr.sentences if s.text.strip()]
+        return ValuedField[list[str]](
+            status=FieldStatus.FILLED,
+            value=items,
+            citations=used_cites,
+        )
+    joined = " ".join(s.text for s in narr.sentences)
     return ValuedField[str](
         status=FieldStatus.FILLED,
         value=joined,
