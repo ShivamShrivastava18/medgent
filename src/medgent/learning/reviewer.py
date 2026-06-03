@@ -28,30 +28,96 @@ from ..models import (
 )
 
 
-# Tiny Indian-brand → (generic, BrandTitle) lookup. Designed to overlap meds the
-# real patient PDF actually contains, plus common ones synthetic patients use.
+# Indian-brand → (generic, BrandTitle) lookup. Sourced from public Medindia / CIMS
+# style references for the most prescribed Indian-market brand names. Covers the meds
+# in the provided real patient PDF + common synthetic-patient prescriptions. The
+# generator is instructed to draw drug names from this dict so the brand-rename rule
+# extracted by the diff analyzer actually fires.
 BRAND_TO_GENERIC: dict[str, tuple[str, str]] = {
+    # PPIs / antacids
     "RACIPER": ("rabeprazole", "Raciper"),
-    "EMESET": ("ondansetron", "Emeset"),
     "PAN": ("pantoprazole", "Pan"),
     "PAN-40": ("pantoprazole", "Pan-40"),
+    "PAN 40": ("pantoprazole", "Pan-40"),
+    "PANTOSEC": ("pantoprazole", "Pantosec"),
+    "PANTAKIND": ("pantoprazole", "Pantakind"),
+    "OMEZ": ("omeprazole", "Omez"),
+    "RAZO": ("rabeprazole", "Razo"),
+    # Antiemetics
+    "EMESET": ("ondansetron", "Emeset"),
+    "PERINORM": ("metoclopramide", "Perinorm"),
+    "VOMIKIND": ("ondansetron", "Vomikind"),
+    # Antibiotics
     "OFLOX TZ": ("ofloxacin + tinidazole", "Oflox-TZ"),
     "OFLOX-TZ": ("ofloxacin + tinidazole", "Oflox-TZ"),
+    "AUGMENTIN": ("amoxicillin + clavulanate", "Augmentin"),
+    "CLAVAM": ("amoxicillin + clavulanate", "Clavam"),
+    "ZEDOTT": ("amoxicillin + clavulanate", "Zedott"),
+    "MONOCEF": ("ceftriaxone", "Monocef"),
+    "INTACEF": ("ceftriaxone", "Intacef"),
+    "TAZACT": ("piperacillin + tazobactam", "Tazact"),
+    "PIPTAZ": ("piperacillin + tazobactam", "Piptaz"),
+    "MEROMAC": ("meropenem", "Meromac"),
+    "MEROPENEM": ("meropenem", "Meropenem"),
+    "AZITHRAL": ("azithromycin", "Azithral"),
+    "AZEE": ("azithromycin", "Azee"),
+    "CIPLOX": ("ciprofloxacin", "Ciplox"),
+    "DOXY-1": ("doxycycline", "Doxy-1"),
+    "METROGYL": ("metronidazole", "Metrogyl"),
+    # GI
     "MEFTAL SPAS": ("mefenamic acid + dicyclomine", "Meftal-Spas"),
+    "MEFTAL-SPAS": ("mefenamic acid + dicyclomine", "Meftal-Spas"),
     "LOPIRAMIDE": ("loperamide", "Lopiramide"),
     "ENTROL": ("racecadotril", "Entrol"),
-    "ZEDOTT": ("amoxicillin + clavulanate", "Zedott"),
-    "M STRONG": ("multivitamin", "M-Strong"),
-    "M-STRONG": ("multivitamin", "M-Strong"),
+    "CREMAFFIN": ("milk of magnesia + liquid paraffin", "Cremaffin"),
+    # Analgesics / antipyretics
     "CROCIN": ("paracetamol", "Crocin"),
     "DOLO": ("paracetamol", "Dolo"),
+    "DOLO-650": ("paracetamol", "Dolo-650"),
+    "CALPOL": ("paracetamol", "Calpol"),
+    "ULTRACET": ("paracetamol + tramadol", "Ultracet"),
+    "BRUFEN": ("ibuprofen", "Brufen"),
+    "VOVERAN": ("diclofenac", "Voveran"),
+    # Cardio
     "LASIX": ("furosemide", "Lasix"),
-    "AUGMENTIN": ("amoxicillin + clavulanate", "Augmentin"),
-    "TAZACT": ("piperacillin + tazobactam", "Tazact"),
-    "MONOCEF": ("ceftriaxone", "Monocef"),
-    "MEROMAC": ("meropenem", "Meromac"),
+    "DYTOR": ("torsemide", "Dytor"),
+    "AMLOKIND": ("amlodipine", "Amlokind"),
+    "AMLONG": ("amlodipine", "Amlong"),
     "NORVASC": ("amlodipine", "Norvasc"),
+    "METOLAR": ("metoprolol", "Metolar"),
+    "CARDACE": ("ramipril", "Cardace"),
+    "TELMA": ("telmisartan", "Telma"),
+    "TELMA-H": ("telmisartan + hydrochlorothiazide", "Telma-H"),
+    "ECOSPRIN": ("aspirin", "Ecosprin"),
+    "ECOSPRIN-AV": ("aspirin + atorvastatin", "Ecosprin-AV"),
+    "CLOPILET": ("clopidogrel", "Clopilet"),
     "ATORVA": ("atorvastatin", "Atorva"),
+    "ROSULIP": ("rosuvastatin", "Rosulip"),
+    "STORVAS": ("atorvastatin", "Storvas"),
+    # Diabetes
+    "GLYCOMET": ("metformin", "Glycomet"),
+    "GLIMER": ("glimepiride", "Glimer"),
+    "INSUGEN": ("insulin (regular)", "Insugen"),
+    "LANTUS": ("insulin glargine", "Lantus"),
+    # Endocrine
+    "THYRONORM": ("levothyroxine", "Thyronorm"),
+    "ELTROXIN": ("levothyroxine", "Eltroxin"),
+    # Multivitamins / misc
+    "M STRONG": ("multivitamin", "M-Strong"),
+    "M-STRONG": ("multivitamin", "M-Strong"),
+    "BECOSULES": ("vitamin B-complex", "Becosules"),
+    "ZINCOVIT": ("multivitamin + zinc", "Zincovit"),
+    # Respiratory
+    "ASTHALIN": ("salbutamol", "Asthalin"),
+    "DUOLIN": ("ipratropium + salbutamol", "Duolin"),
+    "BUDECORT": ("budesonide", "Budecort"),
+    "DERIPHYLLIN": ("etophylline + theophylline", "Deriphyllin"),
+    "MUCAINE": ("oxetacaine + aluminium + magnesium", "Mucaine"),
+    "MONTAIR": ("montelukast", "Montair"),
+    # Steroids
+    "OMNACORTIL": ("prednisolone", "Omnacortil"),
+    "WYSOLONE": ("prednisolone", "Wysolone"),
+    "SOLU-MEDROL": ("methylprednisolone", "Solu-Medrol"),
 }
 
 

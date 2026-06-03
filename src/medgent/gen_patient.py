@@ -30,17 +30,19 @@ from .gemini_client import call_structured
 log = logging.getLogger("medgent.gen_patient")
 
 
+# Conditions oriented toward what an Indian tertiary-care hospital actually sees a lot
+# of in adult medicine wards, so the synthetic charts read plausibly like patient_2.pdf.
 CONDITIONS = [
-    "Acute COPD exacerbation",
-    "Acute heart failure exacerbation",
-    "Community-acquired pneumonia",
-    "Acute pyelonephritis",
-    "Post-operative recovery after open cholecystectomy",
-    "Diabetic foot infection with cellulitis",
-    "Acute stroke (ischemic, left MCA territory)",
-    "Acute myocardial infarction (NSTEMI)",
-    "Mechanical fall with closed head injury",
-    "Sepsis secondary to urinary tract infection",
+    "Dengue fever with thrombocytopenia",
+    "Acute viral hepatitis (probable Hepatitis E)",
+    "Enteric fever (Typhoid) with fever spikes",
+    "Acute gastroenteritis with dehydration and AKI",
+    "Acute exacerbation of COPD with type 2 respiratory failure",
+    "Diabetic ketoacidosis (DKA) in known T2DM",
+    "Community-acquired pneumonia in elderly",
+    "Acute pyelonephritis with sepsis",
+    "Lower-segment cesarean section, post-op day 2",
+    "Acute coronary syndrome (NSTEMI) — medically managed",
 ]
 
 
@@ -61,23 +63,63 @@ class SyntheticPatientSections(BaseModel):
 
 
 _GEN_SYSTEM = """\
-You are generating a synthetic hospital chart for a fictional patient. The notes will be
-used to test a discharge-summary drafting agent's ability to handle messy real-world
-clinical documentation. ALL content is fictional — do not use real patient data.
+You generate a synthetic adult inpatient chart mirroring the typed pages of an Indian
+tertiary-care hospital (the same style as the assignment's provided patient PDF). ALL
+content is fictional. Do not use real patient identifiers.
 
-Each section should look like a typed clinical note (no handwriting simulation needed).
-Use realistic hospital chart phrasing, abbreviations, drug brand-names, and structure.
+LOCALE — non-negotiable:
+- Indian patient name (e.g. "Ramesh K. Reddy, 56/M", "Sunita Mehra, 42/F"). Use the
+  X/M or X/F notation typical on Indian charts.
+- Dates in DD/MM/YY format (e.g. "28/02/26").
+- Drug names are Indian BRAND names from this set whenever possible, written ALL-CAPS
+  with a TAB / INJ / SYP / CAP prefix as on Indian prescriptions:
+    Antibiotics: TAB AUGMENTIN, TAB CLAVAM, INJ MONOCEF, INJ TAZACT, INJ MEROMAC,
+      TAB AZITHRAL, TAB CIPLOX, TAB OFLOX-TZ, TAB METROGYL, TAB DOXY-1
+    PPI / antacid: TAB PAN-40, TAB RACIPER, TAB OMEZ, TAB PANTOSEC, SYP MUCAINE
+    Antiemetic: INJ EMESET, TAB EMESET, TAB PERINORM
+    GI: TAB MEFTAL-SPAS, TAB LOPIRAMIDE, TAB ENTROL, SYP CREMAFFIN
+    Analgesic / antipyretic: TAB DOLO-650, TAB CROCIN, TAB ULTRACET, TAB BRUFEN, INJ VOVERAN
+    Cardio: TAB ECOSPRIN, TAB CLOPILET, TAB ATORVA, TAB ROSULIP, TAB AMLOKIND,
+      TAB METOLAR, TAB CARDACE, TAB TELMA, TAB TELMA-H, INJ LASIX, TAB DYTOR
+    Diabetes: TAB GLYCOMET, TAB GLIMER, INJ INSUGEN, INJ LANTUS
+    Respiratory: TAB MONTAIR, NEB DUOLIN, NEB BUDECORT, TAB DERIPHYLLIN, TAB ASTHALIN
+    Endocrine: TAB THYRONORM, TAB ELTROXIN
+    Steroid: INJ SOLU-MEDROL, TAB WYSOLONE, TAB OMNACORTIL
+    Vitamins: TAB BECOSULES, TAB ZINCOVIT, TAB M-STRONG
+- Frequency notation: 1-0-0 (morning) / 0-0-1 (night) / 1-0-1 (BID) / 1-1-1 (TDS) /
+  SOS (PRN) / HS (bedtime) / STAT (immediate).
+- Vital signs in Indian shorthand: PR 88/min, BP 130/80 mmHg, RR 20/min, SpO2 98%
+  at room air, Temp 99.4°F afebrile, GCS 15/15.
+- Use IRDAI-mandated discharge-summary section headers (ALL CAPS with colons):
+  DIAGNOSIS:, CHIEF COMPLAINTS:, HISTORY OF PRESENT ILLNESS:, PAST HISTORY:,
+  PERSONAL HISTORY:, GENERAL EXAMINATION:, SYSTEMIC EXAMINATION:, INVESTIGATIONS:,
+  COURSE IN THE HOSPITAL:, CONDITION AT DISCHARGE:, ADVICE ON DISCHARGE:,
+  FOLLOW-UP INSTRUCTIONS:.
+- Hospital name a generic fictional Indian one (e.g. "Apollo Speciality Hospital",
+  "Care Multispeciality Hospital", "Sunshine Medical Centre").
 
-You MUST inject exactly three pieces of messiness, and you MUST list them in
-injected_messiness so we can grade detection:
+STRUCTURE per section (synthesise each section field as typed clinical text):
+- admission_note: starts with hospital header, patient demographics, ADMISSION DATE,
+  followed by DIAGNOSIS / CHIEF COMPLAINTS / HOPI / PAST HISTORY / EXAMINATION /
+  INVESTIGATIONS (reports awaited). 300-400 words.
+- progress_note_day_1, progress_note_day_2: SOAP-style with date, vitals row, lab
+  values updated, current meds with frequencies, plan. 150-220 words each.
+- lab_report: tabular-style listing with sample collection date, parameter, value,
+  units, reference range. INCLUDE the planted pending lab here.
+- medication_record: two clearly labelled lists — ADMISSION MEDICATIONS and
+  DISCHARGE MEDICATIONS. Use brand names from the catalog above. Indicate dose,
+  route, frequency (1-0-0 style), duration.
+- discharge_advice: DIAGNOSIS (numbered final list), CONDITION AT DISCHARGE,
+  ADVICE ON DISCHARGE (medication table mirroring the real patient: No, Medication
+  Name, Dosage, Frequency, Duration), FOLLOW-UP INSTRUCTIONS, PENDING RESULTS.
 
-  1. ONE laboratory result that is "pending" or "awaited" at the time of discharge.
-  2. ONE medication change (added or stopped between admission and discharge) for which
-     NO documented reason appears anywhere in the notes.
-  3. ONE conflicting diagnosis — the admission note's assessment vs. the discharge
-     advice's diagnosis list should disagree about ONE secondary diagnosis (e.g.,
-     "rule out X" in admission becomes "confirmed X" in discharge with no documentation
-     of how it was confirmed).
+MESSINESS — inject exactly THREE items and list each in `injected_messiness`:
+  1. ONE lab result explicitly "pending" / "awaited" at discharge.
+  2. ONE medication change between admission and discharge with NO documented
+     reason in any progress note.
+  3. ONE conflicting diagnosis — admission's assessment vs discharge's diagnosis
+     disagree on ONE secondary dx (e.g. admission says "Rule out X", discharge
+     lists X as confirmed without intervening evidence in the notes).
 
 Return a SyntheticPatientSections object matching the schema. No prose outside JSON.
 """
