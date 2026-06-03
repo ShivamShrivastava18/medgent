@@ -1,12 +1,20 @@
 """Iterative learning loop for Part 2.
 
-Pipeline per iteration:
-  1. For each train patient: draft → reviewer → diff → rules → memory.update
-  2. For each holdout patient: draft (with memory) → reviewer → metrics
-  3. Append metrics to a curve
+Performance note: running the full agent loop per (patient × iteration) is too slow for
+a useful curve in a few minutes. We instead run the agent ONCE per patient and cache
+its `AgentState`. Each iteration then re-composes (a single LLM call per narrative
+field) with the current memory, applies the simulated reviewer, and diffs. This keeps
+the loop cheap while letting the rules genuinely flow into the next draft via the
+compose prompt.
 
-After all iterations, plot mean edit-distance-norm (and safety_preservation) over
-iterations. The plot is the artifact the brief asks for.
+Pipeline per iteration:
+  1. For each train patient: load cached state → compose-with-memory → reviewer → diff
+     → memory.add(new_rules)
+  2. For each holdout patient: load cached state → compose-with-memory → reviewer →
+     metrics
+  3. Append metrics to the curve
+
+The plot at the end is the artifact the brief asks for.
 """
 
 from __future__ import annotations
@@ -14,14 +22,14 @@ from __future__ import annotations
 import json
 import logging
 import statistics
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Optional
 
 from .. import config
 from ..agent.loop import run_agent
 from ..compose import compose
-from ..models import DischargeSummary, PatientIndex
+from ..models import AgentState, DischargeSummary, PatientIndex
 from ..pdf_index import build_index
 from ..verifier import verify
 from .diff import extract_rules, overall_metrics
@@ -41,9 +49,23 @@ class IterationMetrics:
     rules_total: int = 0
 
 
-def _draft_one(pdf_path: Path, memory: Optional[CorrectionMemory]) -> DischargeSummary:
+def _state_cache_path(pdf_path: Path) -> Path:
+    return config.OUTPUTS_DIR / "agent_states" / f"{pdf_path.parent.name}.json"
+
+
+def _build_state_cached(pdf_path: Path) -> AgentState:
+    cache = _state_cache_path(pdf_path)
+    if cache.exists():
+        return AgentState.model_validate_json(cache.read_text())
     idx: PatientIndex = build_index(pdf_path)
     state = run_agent(idx)
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    cache.write_text(state.model_dump_json(indent=2))
+    return state
+
+
+def _draft_from_cached_state(pdf_path: Path, memory: Optional[CorrectionMemory]) -> DischargeSummary:
+    state = _build_state_cached(pdf_path)
     draft = compose(state, source_pdf=str(pdf_path), memory=memory)
     draft = verify(draft)
     return draft
@@ -56,7 +78,7 @@ def evaluate(holdout_pdfs: list[Path], memory: CorrectionMemory) -> IterationMet
     per_section_acc: dict[str, list[float]] = {}
 
     for pdf in holdout_pdfs:
-        draft = _draft_one(pdf, memory)
+        draft = _draft_from_cached_state(pdf, memory)
         edited = review(draft)
         m = overall_metrics(draft, edited)
         edit_distances.append(m["edit_distance_norm_mean"])
@@ -99,11 +121,11 @@ def train_loop(
         log.info("=== iteration %d/%d — gathering edits on %d train patients ===",
                  it, n_iterations, len(train_pdfs))
         for pdf in train_pdfs:
-            draft = _draft_one(pdf, memory)
+            draft = _draft_from_cached_state(pdf, memory)
             edited = review(draft)
             new_rules = extract_rules(draft, edited)
             added = memory.add(new_rules)
-            log.info("  %s: %d new rules added (total=%d)", pdf.name, added, len(memory.rules))
+            log.info("  %s: %d new rules added (total=%d)", pdf.parent.name, added, len(memory.rules))
         memory.save(memory_path)
 
         m = evaluate(holdout_pdfs, memory)
@@ -112,7 +134,7 @@ def train_loop(
         log.info("  holdout edit_distance_norm=%.3f safety_preservation=%.3f rules=%d",
                  m.holdout_edit_distance_norm, m.holdout_safety_preservation, m.rules_total)
 
-    metrics_path.write_text(json.dumps([m.__dict__ for m in metrics], indent=2))
+    metrics_path.write_text(json.dumps([asdict(m) for m in metrics], indent=2))
     return metrics
 
 
