@@ -122,6 +122,9 @@ def _describe_change(section: str, d: str, e: str) -> str:
     if section == "pending_results":
         if "(pending as of" in e and "(pending as of" not in d:
             return "pending result gained explicit-date suffix"
+    if section == "hospital_course":
+        if "hospital course summary:" in e.lower() and "hospital course summary:" not in d.lower():
+            return "hospital course gained 'Hospital course summary:' opener"
     return f"text edit ({Levenshtein.distance(d, e)} chars)"
 
 
@@ -160,6 +163,12 @@ def extract_rules(draft: DischargeSummary, edited: DischargeSummary) -> list[Rul
             hint = (
                 "Render pending results with explicit date suffix: "
                 "'<test> (pending as of <discharge_date>)'."
+            )
+        elif "hospital course gained" in diff.description:
+            kind = "text_change"
+            hint = (
+                "Open the hospital_course narrative with the exact header "
+                "'Hospital course summary:' followed by one space. Break sentences with newlines."
             )
         else:
             kind = "text_change"

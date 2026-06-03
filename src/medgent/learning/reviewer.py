@@ -173,6 +173,28 @@ def _edit_followup(vf: ValuedField, specialty: Optional[str]) -> ValuedField:
     return vf2
 
 
+def _edit_hospital_course(vf: ValuedField) -> ValuedField:
+    """Reviewer enforces a recognizable opener so we have a measurable, learnable edit.
+
+    The hidden rule: hospital_course must start with 'Hospital course summary:' and
+    have sentence-level line breaks. Real reviewers absolutely standardize narrative
+    headers like this; we use a deterministic version so Part 2 has measurable signal.
+    """
+    if vf.status != FieldStatus.FILLED or not vf.value:
+        return vf
+    text = str(vf.value).strip()
+    if not text:
+        return vf
+    new_text = text
+    if not new_text.lower().startswith("hospital course summary:"):
+        new_text = "Hospital course summary: " + new_text
+    # Pretty-print: ensure sentence-level line breaks
+    new_text = re.sub(r"\.\s+(?=[A-Z(])", ".\n", new_text)
+    vf2 = vf.model_copy(deep=True)
+    vf2.value = new_text
+    return vf2
+
+
 def _edit_pending_results(vf: ValuedField, discharge_date: Optional[str]) -> ValuedField:
     if vf.status != FieldStatus.FILLED or not vf.value:
         return vf
@@ -201,6 +223,7 @@ def review(draft: DischargeSummary) -> DischargeSummary:
     edited.admission_medications = _edit_brand_field(edited.admission_medications)
     edited.discharge_medications = _edit_brand_field(edited.discharge_medications)
     edited.secondary_diagnoses = _edit_dx_order(edited.secondary_diagnoses)
+    edited.hospital_course = _edit_hospital_course(edited.hospital_course)
 
     principal_val = (
         edited.principal_diagnosis.value if edited.principal_diagnosis.status == FieldStatus.FILLED else None
