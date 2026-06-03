@@ -7,7 +7,7 @@ fact through the schema without saying where it came from.
 
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 from enum import Enum
 from typing import Any, Generic, Literal, Optional, TypeVar
 
@@ -173,7 +173,7 @@ class DischargeSummary(BaseModel):
     drug_interactions: ValuedField[list[DrugInteraction]]
 
     safety_flags: list[SafetyFlag] = Field(default_factory=list)
-    generated_at: datetime = Field(default_factory=datetime.utcnow)
+    generated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     source_pdf: Optional[str] = None
     iterations_used: int = 0
     tool_calls_used: int = 0
@@ -262,7 +262,7 @@ class PatientIndex(BaseModel):
     source_pdf: str
     pages: list[PageExtract]
     encounters: list[Encounter] = Field(default_factory=list)
-    generated_at: datetime = Field(default_factory=datetime.utcnow)
+    generated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 # ----------------------------- agent loop state --------------------------------
