@@ -74,14 +74,20 @@ def _verify_sentence(sentence: str, evidence: list[Citation]) -> Verdict:
         "Decide SUPPORTED or NOT_SUPPORTED. Be conservative — if no excerpt clearly "
         "supports the sentence, return NOT_SUPPORTED."
     )
-    out = call_structured(
-        prompt,
-        schema=Verdict,
-        system=_VERIFIER_SYSTEM,
-        model=config.MODEL_FLASH,
-        temperature=0.0,
-        max_output_tokens=300,
-    )
+    try:
+        out = call_structured(
+            prompt,
+            schema=Verdict,
+            system=_VERIFIER_SYSTEM,
+            model=config.MODEL_FLASH,
+            temperature=0.0,
+            max_output_tokens=600,
+        )
+    except Exception as exc:
+        # Conservative bias: when the verifier itself fails, treat as not_supported.
+        # Better to strip a legitimate sentence than to let an unsupported one through.
+        log.warning("verifier call failed (%s) — defaulting to not_supported", str(exc)[:120])
+        return Verdict(decision="not_supported", reason="verifier call failed; conservative default")
     return out if isinstance(out, Verdict) else Verdict.model_validate(out.model_dump())
 
 
