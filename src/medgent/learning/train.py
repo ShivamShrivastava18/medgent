@@ -149,24 +149,33 @@ def plot_metrics(metrics: list[IterationMetrics], out_path: Path) -> None:
 
     iters = [m.iteration for m in metrics]
     eds = [m.holdout_edit_distance_norm for m in metrics]
+    hospital = [m.per_section.get("sec.hospital_course", 0.0) for m in metrics]
     safety = [m.holdout_safety_preservation for m in metrics]
 
-    fig, ax1 = plt.subplots(figsize=(8, 5))
+    fig, ax1 = plt.subplots(figsize=(9, 5))
     color1 = "tab:blue"
+    color1b = "tab:orange"
     ax1.set_xlabel("iteration")
-    ax1.set_ylabel("mean edit-distance-norm (holdout)", color=color1)
-    ax1.plot(iters, eds, "o-", color=color1, label="edit_distance_norm")
-    ax1.tick_params(axis="y", labelcolor=color1)
-    ax1.set_ylim(0, max(0.5, max(eds) * 1.1))
+    ax1.set_ylabel("edit-distance-norm (holdout) — lower is better")
+    ax1.plot(iters, eds, "o-", color=color1, label="overall mean")
+    ax1.plot(iters, hospital, "^--", color=color1b, label="sec.hospital_course")
+    # Auto-scale Y to include the data range tightly
+    y_max = max(0.005, max(eds + hospital) * 1.2)
+    ax1.set_ylim(0, y_max)
+    ax1.tick_params(axis="y")
+    ax1.legend(loc="upper right")
 
     ax2 = ax1.twinx()
     color2 = "tab:green"
     ax2.set_ylabel("safety_preservation (holdout)", color=color2)
-    ax2.plot(iters, safety, "s--", color=color2, label="safety_preservation")
+    ax2.plot(iters, safety, "s:", color=color2, label="safety_preservation")
     ax2.tick_params(axis="y", labelcolor=color2)
     ax2.set_ylim(0, 1.05)
 
-    plt.title("Part 2 — Learning from simulated reviewer edits")
+    plt.title(
+        "Part 2 — Learning from simulated reviewer edits\n"
+        f"holdout=2 patients, train=3 patients, rules learned={metrics[-1].rules_total}"
+    )
     fig.tight_layout()
     fig.savefig(out_path, dpi=120)
     log.info("plot saved to %s", out_path)
