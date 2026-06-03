@@ -4,6 +4,18 @@ Record with Loom. Two patients shown:
 - **Real patient** (`data/patients/patient_2/source.pdf`) — messy, mixed handwritten/typed, prior-encounter contamination. This is where the agent's flag-or-escalate behaviour stands out.
 - **One synthetic patient** (`data/synthetic/synth_03/source.pdf` recommended — a typed cleaner case with planted messiness).
 
+## Use the demo UI to avoid window-switching
+
+```bash
+python frontend/server.py     # → http://127.0.0.1:8000
+```
+
+Sidebar shortcuts jump straight to the key moments:
+- **⚠ Handwriting downgrade** — patient_2 trace, the FILLED → FLAGGED safety guardrail moment
+- **✓ Learned prefix** — synth_03 draft, the `Hospital course summary:` opener the agent learned from reviewer edits
+- **⚕ Medication reconciliation** — patient_2 trace, undocumented med changes surfaced
+- **📈 Part 2 curve** — holdout edit-distance drop + safety_preservation overlay
+
 ## Suggested narrative (≈4 minutes)
 
 ### 0:00–0:30 — Frame the problem (30s)
