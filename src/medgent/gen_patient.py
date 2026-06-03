@@ -121,20 +121,25 @@ def render_to_pdf(sections: SyntheticPatientSections, out_path: Path) -> Path:
     ]
     for title, body in page_order:
         pdf.add_page()
-        pdf.set_font("Helvetica", "B", 14)
-        pdf.cell(0, 8, txt=f"{title}  ·  Patient {sections.patient_id}  ·  {sections.condition}", ln=True)
-        pdf.ln(2)
+        pdf.set_font("Helvetica", "B", 13)
+        pdf.multi_cell(
+            0, 7,
+            txt=f"{title}  -  Patient {sections.patient_id}  -  {sections.condition}",
+            wrapmode="CHAR",
+        )
+        pdf.ln(1)
         pdf.set_font("Helvetica", "", 10)
         for para in body.split("\n"):
             para = para.strip()
             if not para:
                 pdf.ln(2)
                 continue
+            ascii_para = para.encode("ascii", "replace").decode()
             try:
-                pdf.multi_cell(0, 5, txt=para)
+                pdf.multi_cell(0, 5, txt=ascii_para, wrapmode="CHAR")
             except Exception:
-                # fpdf2 can choke on rare unicode; replace stubbornly
-                pdf.multi_cell(0, 5, txt=para.encode("ascii", "replace").decode())
+                # Last resort: truncate
+                pdf.multi_cell(0, 5, txt=ascii_para[:500] + " ...", wrapmode="CHAR")
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     pdf.output(str(out_path))
@@ -153,10 +158,13 @@ def generate_cohort(n: int, *, seed_start: int = 1) -> list[Path]:
         sec = generate_patient(condition, seed=seed)
         out_dir = config.SYNTHETIC_DIR / sec.patient_id
         out_dir.mkdir(parents=True, exist_ok=True)
-        pdf_path = render_to_pdf(sec, out_dir / "source.pdf")
-        # Persist the "ground truth" sidecar (injected_messiness etc.) for Part 2 scoring
+        # Persist the ground-truth sidecar FIRST so we don't lose it if rendering fails
         (out_dir / "manifest.json").write_text(sec.model_dump_json(indent=2))
-        paths.append(pdf_path)
+        try:
+            pdf_path = render_to_pdf(sec, out_dir / "source.pdf")
+            paths.append(pdf_path)
+        except Exception as exc:
+            log.error("render failed for %s: %s — manifest kept", sec.patient_id, exc)
     return paths
 
 
