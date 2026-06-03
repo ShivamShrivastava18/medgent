@@ -252,12 +252,15 @@ def cluster_encounters(pages: list[PageExtract], window_days: int = config.ENCOU
             if enc.encounter_id == p.encounter_id and p.page_no not in enc.pages:
                 enc.pages.append(p.page_no)
 
-    # Most recent encounter (latest end date) = current
-    encounters.sort(key=lambda e: e.latest_date or "0000-00-00")
+    # "Current" = the encounter with the most pages. A real admission yields many
+    # pages of contiguous notes; stray dates (DOB, "diabetic since 2012", form
+    # printing dates) yield single-page encounters. Tie-break with latest date.
     for enc in encounters:
         enc.is_current = False
-    encounters[-1].is_current = True
-
+    encounters.sort(key=lambda e: (len(e.pages), e.latest_date or "0000-00-00"), reverse=True)
+    encounters[0].is_current = True
+    # Restore chronological order for display
+    encounters.sort(key=lambda e: e.earliest_date or "0000-00-00")
     return encounters
 
 
