@@ -60,7 +60,7 @@ RULES:
 """
 
 
-def _compose_narrative(field_name: str, evidence: list[Citation]) -> NarrativeOutput:
+def _compose_narrative(field_name: str, evidence: list[Citation], memory_hint: str = "") -> NarrativeOutput:
     if not evidence:
         return NarrativeOutput(sentences=[])
     bullets = "\n".join(
@@ -72,9 +72,12 @@ def _compose_narrative(field_name: str, evidence: list[Citation]) -> NarrativeOu
         "follow_up": "Write follow-up instructions as a list of brief items. Always include specialty/department when documented.",
     }[field_name]
 
+    learned_block = f"\n\n{memory_hint}\n" if memory_hint else ""
+
     prompt = (
         f"Compose: {field_name}\n\n"
-        f"Guideline: {target}\n\n"
+        f"Guideline: {target}\n"
+        f"{learned_block}\n"
         f"Evidence excerpts (cite by index):\n{bullets}\n\n"
         "Return JSON {sentences: [{text, citation_indices: [int]}, ...]}."
     )
@@ -89,10 +92,10 @@ def _compose_narrative(field_name: str, evidence: list[Citation]) -> NarrativeOu
     return out if isinstance(out, NarrativeOutput) else NarrativeOutput.model_validate(out.model_dump())
 
 
-def _narrative_to_field(field_name: str, slot: FieldSlot) -> ValuedField:
+def _narrative_to_field(field_name: str, slot: FieldSlot, memory_hint: str = "") -> ValuedField:
     if slot.status != FieldStatus.FILLED or not slot.citations:
         return _slot_to_valuedfield(slot, _coerce=str)
-    narr = _compose_narrative(field_name, slot.citations)
+    narr = _compose_narrative(field_name, slot.citations, memory_hint=memory_hint)
     if not narr.sentences:
         return ValuedField[str](
             status=FieldStatus.FLAGGED,
@@ -181,11 +184,13 @@ def _slot_to_valuedfield(slot: FieldSlot, _coerce=None) -> ValuedField:
 # ----------------------------- main entry --------------------------------------
 
 
-def compose(state: AgentState, source_pdf: Optional[str] = None) -> DischargeSummary:
+def compose(state: AgentState, source_pdf: Optional[str] = None, memory=None) -> DischargeSummary:
+    """If `memory` is a CorrectionMemory, its rules are injected into narrative prompts."""
     fields: dict[str, ValuedField] = {}
     for name, slot in state.todo.items():
         if name in _NARRATIVE_FIELDS:
-            fields[name] = _narrative_to_field(name, slot)
+            hint = memory.for_compose_prompt(name) if memory is not None else ""
+            fields[name] = _narrative_to_field(name, slot, memory_hint=hint)
         else:
             coerced = lambda v, n=name: _coerce_value(n, v)
             fields[name] = _slot_to_valuedfield(slot, _coerce=coerced)
